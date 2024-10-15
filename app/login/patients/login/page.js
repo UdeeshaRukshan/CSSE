@@ -12,7 +12,7 @@ const PatientLoginPage = () => {
     };
 
     const handleSignUp = () => {
-        router.push('/login/patients/login/qwer/content'); // Navigate to the sign-up page
+        router.push('/login/patients/login/content'); // Navigate to the sign-up page
     };
 
     return (

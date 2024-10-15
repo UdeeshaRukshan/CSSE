@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import axios from "axios";
 import { Form, FormControl } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -17,7 +17,7 @@ import {
   IdentificationTypes,
   PatientFormDefaultValues,
 } from "@/constants";
-import { registerPatient } from "@/lib/actions/patient.actions";
+
 import { PatientFormValidation } from "@/lib/validation";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -85,11 +85,15 @@ const RegisterForm = ({ user }: { user: User }) => {
         privacyConsent: values.privacyConsent,
       };
 
-      const newPatient = await registerPatient(patient);
+      const newPatient = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/patients`, patient);
+      if (newPatient.status === 201) {
+        const newPatientId = newPatient.data.patients._id; // Adjust this based on your API response structure
 
-      if (newPatient) {
-        router.push(`/patients/${user.$id}/new-appointment`);
-      }
+        // Redirect to the new appointment page
+        router.push(`/login/patients/login/${newPatientId}/new-appointment`);
+    } else {
+        console.log('Failed to create a new patient:', newPatient.data.patients);
+    }
     } catch (error) {
       console.log(error);
     }

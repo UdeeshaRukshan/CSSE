@@ -1,3 +1,6 @@
 {
-  "/login/staff/table/page": "app/login/staff/table/page.js"
+  "/login/patients/login/page": "app/login/patients/login/page.js",
+  "/login/patients/login/[userId]/register/page": "app/login/patients/login/[userId]/register/page.js",
+  "/login/patients/login/content/page": "app/login/patients/login/content/page.js",
+  "/page": "app/page.js"
 }
