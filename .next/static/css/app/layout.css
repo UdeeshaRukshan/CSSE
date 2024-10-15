@@ -1126,9 +1126,6 @@ video {
 .rounded-sm {
   border-radius: 0.125rem;
 }
-.rounded-lg {
-  border-radius: 0.5rem;
-}
 .border {
   border-width: 1px;
 }
@@ -1217,10 +1214,6 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
-.bg-blue-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(121 181 236 / var(--tw-bg-opacity));
-}
 .bg-appointments {
   background-image: url('/assets/images/appointments-bg.png');
 }
@@ -1250,9 +1243,6 @@ video {
 }
 .p-6 {
   padding: 1.5rem;
-}
-.p-2 {
-  padding: 0.5rem;
 }
 .px-2 {
   padding-left: 0.5rem;
@@ -1340,9 +1330,6 @@ video {
 }
 .font-semibold {
   font-weight: 600;
-}
-.font-bold {
-  font-weight: 700;
 }
 .capitalize {
   text-transform: capitalize;
@@ -2145,11 +2132,6 @@ video {
 
 .hover\:bg-slate-900\/90:hover {
   background-color: rgb(15 23 42 / 0.9);
-}
-
-.hover\:bg-blue-600:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(21 36 50 / var(--tw-bg-opacity));
 }
 
 .hover\:text-slate-900:hover {

@@ -8,7 +8,11 @@ const PatientLoginPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle patient login logic here (add your login functionality)
-        router.push('/dashboard'); // Navigate to another page after login
+        router.push(''); // Navigate to another page after login
+    };
+
+    const handleSignUp = () => {
+        router.push('/login/patients/login/qwer/content'); // Navigate to the sign-up page
     };
 
     return (
@@ -41,6 +45,14 @@ const PatientLoginPage = () => {
                         Login
                     </button>
                 </form>
+                <div className="mt-4 text-center">
+                    <button 
+                        onClick={handleSignUp} 
+                        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold transition duration-300"
+                    >
+                        Sign Up
+                    </button>
+                </div>
             </div>
         </div>
     );
