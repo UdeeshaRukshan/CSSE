@@ -1,24 +1,43 @@
+// Mark this component as a Client Component
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import { Doctors } from "@/constants";
-import { getAppointment } from "@/lib/actions/appointment.actions";
 import { formatDateTime } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const RequestSuccess = async ({
-  searchParams,
-  params: { userId },
-}: SearchParamProps) => {
+const RequestSuccess = ({ searchParams, params: { userId } }: SearchParamProps) => {
+  const [appointment, setAppointment] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const appointmentId = (searchParams?.appointmentId as string) || "";
-  const appointment = await getAppointment(appointmentId);
 
-  const doctor = Doctors.find(
-    (doctor) => doctor.name === appointment.primaryPhysician
-  );
+  useEffect(() => {
+    const fetchAppointment = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/appointment/${appointmentId}`);
+        setAppointment(response.data); // Adjust based on the API response structure
+      } catch (err) {
+        console.error('Error fetching appointment:', err);
+       
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchAppointment();
+  }, [appointmentId]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
+  const doctor = Doctors.find((doctor) => doctor.name === appointment?.doctor);
+  
   return (
-    <div className=" flex h-screen max-h-screen px-[5%]">
+    <div className="flex h-screen max-h-screen px-[5%]">
       <div className="success-img">
         <Link href="/">
           <Image
@@ -47,14 +66,18 @@ const RequestSuccess = async ({
         <section className="request-details">
           <p>Requested appointment details: </p>
           <div className="flex items-center gap-3">
-            <Image
-              src={doctor?.image!}
-              alt="doctor"
-              width={100}
-              height={100}
-              className="size-6"
-            />
-            <p className="whitespace-nowrap">Dr. {doctor?.name}</p>
+            {doctor && (
+              <>
+                <Image
+                  src={doctor.image}
+                  alt="doctor"
+                  width={100}
+                  height={100}
+                  className="size-6"
+                />
+                <p className="whitespace-nowrap">Dr. {doctor.name}</p>
+              </>
+            )}
           </div>
           <div className="flex gap-2">
             <Image
@@ -63,17 +86,17 @@ const RequestSuccess = async ({
               width={24}
               alt="calendar"
             />
-            <p> {formatDateTime(appointment.schedule).dateTime}</p>
+            <p>{formatDateTime(appointment?.schedule).dateTime}</p>
           </div>
         </section>
 
         <Button variant="outline" className="shad-primary-btn" asChild>
-          <Link href={`/patients/${userId}/new-appointment`}>
+          <Link href={`/login/patients/login/new-appointment`}>
             New Appointment
           </Link>
         </Button>
 
-        <p className="copyright">© 2024 CarePluse</p>
+       
       </div>
     </div>
   );

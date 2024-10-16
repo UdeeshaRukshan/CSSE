@@ -2,85 +2,105 @@
   "node": {
     "318c767fe7efdfcf2fd7d2839240b9badae9630f": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     },
     "5a1acfc36696cd37e224265618dc8d5744b69fbb": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     },
     "5b549816f0480aae5c7c2106c02413457c4c0676": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     },
     "67518e21a8cc712e367b079550db59235307556a": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     },
     "7d978d03ba8920c10fa491930241df6c3fe3eaaa": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     },
     "812760d27fe30aa1b24ca7d73a4e104a4fd94987": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     },
     "85877f237df2c0fee482a79ff548a95552887f04": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     },
     "8ec69fa9a3354a6b49eff70da93b3cf515674be4": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     },
     "b5686c7f65b8c186019fd895b521d88f8b680ca4": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     },
     "ec0e2b72cd13f03ca471656991c6efd5dbec1f78": {
       "workers": {
-        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!"
+        "app/login/patients/login/new-appointment/page": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=true!",
+        "app/login/patients/login/new-appointment/success/page": "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fudeesharukshan%2FDocuments%2FY3S2%2FCSSE_FP%2FCSSE%2Flib%2Factions%2Fappointment.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getRecentAppointmentList%22%2C%22updateAppointment%22%2C%22sendSMSNotification%22%2C%22%24%24ACTION_0%22%2C%22%24%24ACTION_4%22%2C%22createAppointment%22%2C%22%24%24ACTION_3%22%2C%22getAppointment%22%2C%22%24%24ACTION_2%22%5D%5D%5D&__client_imported__=!"
       },
       "layer": {
-        "app/login/patients/login/new-appointment/page": "action-browser"
+        "app/login/patients/login/new-appointment/page": "action-browser",
+        "app/login/patients/login/new-appointment/success/page": "rsc"
       }
     }
   },
   "edge": {},
-  "encryptionKey": "0r2zkm0pNziKhanI7HD/oa1rPFsTpd/ouHbzFKUuSnI="
+  "encryptionKey": "F5WgcoR9ghyA21Y3MPr/McVd4RclqXz6P0MsZ17JfpQ="
 }

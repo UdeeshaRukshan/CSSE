@@ -5,12 +5,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/global-error.js"
     ],
-    "/login/patients/login/reg/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/login/patients/login/reg/page.css",
-      "static/chunks/app/login/patients/login/reg/page.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -27,6 +21,21 @@
       "static/chunks/main-app.js",
       "static/css/app/login/patients/login/new-appointment/page.css",
       "static/chunks/app/login/patients/login/new-appointment/page.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/login/patients/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/login/patients/login/page.js"
+    ],
+    "/login/patients/login/new-appointment/success/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/login/patients/login/new-appointment/success/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
