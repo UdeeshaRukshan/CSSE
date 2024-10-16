@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const patientSchema = new mongoose.Schema({
   userId: { type: String, required: true },
+  email: { type: String, required: true},
   birthDate: { type: Date, required: true },
   gender: { type: String, required: true },
   address: { type: String, required: true },
@@ -11,7 +12,7 @@ const patientSchema = new mongoose.Schema({
   primaryPhysician: { type: String, required: true },
   insuranceProvider: { type: String, required: true },
   insurancePolicyNumber: { type: String, required: true },
-  
+
   allergies: { type: [String], required: true },
   currentMedication: { type: [String], required: true },
   familyMedicalHistory: { type: [String], required: true },

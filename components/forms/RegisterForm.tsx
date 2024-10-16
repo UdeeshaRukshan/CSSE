@@ -25,42 +25,93 @@ import "react-phone-number-input/style.css";
 import CustomFormField, { FormFieldType } from "../CustomFormField";
 import { FileUploader } from "../FileUploader";
 import SubmitButton from "../SubmitButton";
+import {useEffect} from "react";
 
-const RegisterForm = ({ user }: { user: User }) => {
+const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift();
+  return null;
+};
+
+interface User {
+  name: string;
+  email: string;
+  phone: string;
+}
+const RegisterForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   const form = useForm<z.infer<typeof PatientFormValidation>>({
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
       ...PatientFormDefaultValues,
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
+      name:'',
+      email:'',
+      phone:'',
     },
   });
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userId = getCookie('userId'); // Get userId from cookie
+      if (!userId) return;
 
+      try {
+        const response = await fetch(`http://localhost:4000/api/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data); // Set user data in state
+          
+          // Update form default values with fetched user data
+          form.reset({
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+          });
+        } else {
+          console.error('Failed to fetch user data.');
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
-
-    // Store file info in form data as
-    let formData;
-    if (
-      values.identificationDocument &&
-      values.identificationDocument?.length > 0
-    ) {
-      const blobFile = new Blob([values.identificationDocument[0]], {
-        type: values.identificationDocument[0].type,
-      });
-
-      formData = new FormData();
-      formData.append("blobFile", blobFile);
-      formData.append("fileName", values.identificationDocument[0].name);
+    const userId = getCookie('userId');
+    if (!userId) {
+      console.error('User ID not found in cookie');
+      setIsLoading(false);
+      return;
     }
+    // Store file info in form data as
+    // let formData;
+    // if (
+    //   values.identificationDocument &&
+    //   values.identificationDocument?.length > 0
+    // ) {
+    //   const blobFile = new Blob([values.identificationDocument[0]], {
+    //     type: values.identificationDocument[0].type,
+    //   });
+
+    //   formData = new FormData();
+    //   formData.append("blobFile", blobFile);
+    //   formData.append("fileName", values.identificationDocument[0].name);
+    // }
 
     try {
       const patient = {
-        userId: user.$id,
+        userId: userId,
         name: values.name,
         email: values.email,
         phone: values.phone,
@@ -79,18 +130,20 @@ const RegisterForm = ({ user }: { user: User }) => {
         pastMedicalHistory: values.pastMedicalHistory,
         identificationType: values.identificationType,
         identificationNumber: values.identificationNumber,
-        identificationDocument: values.identificationDocument
-          ? formData
-          : undefined,
+        // identificationDocument: values.identificationDocument
+        //   ? formData
+        //   : undefined,
+        
         privacyConsent: values.privacyConsent,
       };
-
-      const newPatient = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/patients`, patient);
+console.log(patient);
+      const newPatient = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/patients/register`, patient);
+      console.log(newPatient);
       if (newPatient.status === 201) {
         const newPatientId = newPatient.data.patient._id; // Adjust this based on your API response structure
 
         // Redirect to the new appointment page
-        router.push(`/login/patients/login/${newPatientId}/new-appointment`);
+        router.push(`/login/patients/login/new-appointment`);
     } else {
         console.log('Failed to create a new patient:', newPatient.data.patient);
     }
@@ -337,7 +390,7 @@ const RegisterForm = ({ user }: { user: User }) => {
             placeholder="123456789"
           />
 
-          <CustomFormField
+          {/* <CustomFormField
             fieldType={FormFieldType.SKELETON}
             control={form.control}
             name="identificationDocument"
@@ -347,7 +400,7 @@ const RegisterForm = ({ user }: { user: User }) => {
                 <FileUploader files={field.value} onChange={field.onChange} />
               </FormControl>
             )}
-          />
+          /> */}
         </section>
 
         <section className="space-y-6">

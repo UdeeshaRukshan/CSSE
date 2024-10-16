@@ -1,5 +1,5 @@
 {
-  "/login/patients/login/content/page": "app/login/patients/login/content/page.js",
-  "/login/patients/login/page": "app/login/patients/login/page.js",
-  "/page": "app/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/login/patients/login/new-appointment/page": "app/login/patients/login/new-appointment/page.js",
+  "/login/patients/login/reg/page": "app/login/patients/login/reg/page.js"
 }
