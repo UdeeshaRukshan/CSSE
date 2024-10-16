@@ -25,7 +25,7 @@ const registerPatient = async (req, res) => {
             pastMedicalHistory,
             identificationType,
             identificationNumber,
-            identificationDocument,
+           
             privacyConsent,
         } = req.body;
 
@@ -50,7 +50,7 @@ const registerPatient = async (req, res) => {
             pastMedicalHistory,
             identificationType,
             identificationNumber,
-            identificationDocument,
+            
             privacyConsent,
         });
 

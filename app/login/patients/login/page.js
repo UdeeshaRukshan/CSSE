@@ -14,7 +14,7 @@ const PatientLoginPage = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:4000/api/users/login', { // Adjust API endpoint if necessary
+            const response = await fetch('http://localhost:4000/api/users/login', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,11 +27,10 @@ const PatientLoginPage = () => {
                 const data = await response.json();
                 
                 // Save userId and authToken as cookies
-                Cookies.set('userId', data.userId, { expires: 1 }); // 1 day expiration for userId
-                Cookies.set('authToken', data.authToken, { expires: 1 }); // 1 day expiration for auth token
+                Cookies.set('userId', data.userId, { expires: 1 }); 
+                Cookies.set('authToken', data.authToken, { expires: 1 }); 
 
-                // Redirect to the patient dashboard or another page after login
-                router.push(`/login/patients/login/content`);
+                router.push(`login/patients/login/new-appointment`);
             } else {
                 setError('Invalid email or password.');
             }
@@ -41,7 +40,7 @@ const PatientLoginPage = () => {
     };
 
     const handleSignUp = () => {
-        router.push('/login/patients/login/content'); // Navigate to the sign-up page
+        router.push('/login/patients/login/content'); 
     };
 
     return (

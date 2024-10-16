@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/udeesharukshan/Documents/Y3S2/CSSE_FP/CSSE/app/layout\":[\"static/media/2b3f1035ed87a788-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
