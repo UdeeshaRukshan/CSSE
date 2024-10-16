@@ -1,248 +1,278 @@
 'use client'
 
-import { useState } from 'react'
-import { Moon, Sun, Globe, ArrowUpRight, Users, FileText, User, Share2, RotateCcw, HelpCircle, Bell, Settings, Search } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { useState, useEffect } from 'react'
+import { Moon, Sun, FileText, Menu, X, Plus, Calendar, User, Send, ChevronLeft, ChevronRight, Home, Users, Settings, LogOut, MessageCircle } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { useRouter } from 'next/navigation'
 
-const monthlyData = [
-  { month: 'Jan', value1: 70, value2: 90 },
-  { month: 'Feb', value1: 50, value2: 40 },
-  { month: 'Mar', value1: 25, value2: 30 },
-  { month: 'Apr', value1: 35, value2: 45 },
-  { month: 'May', value1: 20, value2: 25 },
-  { month: 'Jun', value1: 75, value2: 60 },
-  { month: 'Jul', value1: 50, value2: 70 },
-  { month: 'Aug', value1: 50, value2: 40 },
-  { month: 'Sep', value1: 25, value2: 30 },
-  { month: 'Oct', value1: 35, value2: 45 },
-  { month: 'Nov', value1: 20, value2: 25 },
-  { month: 'Dec', value1: 75, value2: 60 },
+const appointmentsData = [
+  { patient: 'Phoenix Baker', date: 'Jan 4, 2022', status: 'Scheduled', doctor: 'Dr. Alex Ramirez' },
+  { patient: 'Candice Wu', date: 'Jan 2, 2022', status: 'Pending', doctor: 'Dr. Michael May' },
+  { patient: 'Lana Steiner', date: 'Jan 4, 2022', status: 'Cancelled', doctor: 'Dr. Jasmine Lee' },
+  { patient: 'Drew Cano', date: 'Jan 8, 2022', status: 'Scheduled', doctor: 'Dr. Hardik Sharma' },
+  { patient: 'Natali Craig', date: 'Jan 6, 2022', status: 'Pending', doctor: 'Dr Aiyana Cruz' },
+  ...Array(20).fill(null).map((_, i) => ({
+    patient: `Patient ${i + 6}`,
+    date: `Jan ${10 + i}, 2022`,
+    status: ['Scheduled', 'Pending', 'Cancelled'][i % 3],
+    doctor: `Dr. Doctor ${i + 6}`
+  }))
 ]
 
-const salesTrendsData = [
-  { name: 'Web Design Template', trend: 2.0 },
-  { name: 'App Template', trend: -2.0 },
-  { name: 'Dashboard Template', trend: -2.0 },
-  { name: 'Icons Set', trend: 2.0 },
+const statsData = [
+  { title: 'Total number of work shifts', value: 94, icon: '📅' },
+  { title: 'Total number of available employees', value: 32, icon: '⏳' },
+  { title: 'Total number of workshift cancellation requests', value: 56, icon: '❌' },
+  { title: 'Total number of workshift staff complains', value: 56, icon: '❌' },
+  { title: 'Total number of recruiments ongoing', value: 56, icon: '❌' },
 ]
-
-const productSalesData = [
-  { name: 'Web Template', sold: 123, trend: 2.0 },
-  { name: 'Icons Set', sold: 123, trend: -2.0 },
-  { name: 'App Template', sold: 123, trend: -2.0 },
-  { name: 'Dashboard Template', sold: 123, trend: 2.0 },
-]
-
-const earningsCategoriesData = [
-  { name: 'Web Template', value: 1763, percentage: 35 },
-  { name: 'Icons Set', value: 321, percentage: 25 },
-  { name: 'App Template', value: 669, percentage: 25 },
-  { name: 'Dashboard Template', value: 154, percentage: 15 },
-]
-
-const COLORS = ['#8b5cf6', '#f472b6', '#60a5fa', '#fbbf24']
 
 export default function Dashboard() {
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isNewEmployeeFormOpen, setIsNewEmployeeFormOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
+  const [selectedRole, setSelectedRole] = useState("")
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode)
+  const itemsPerPage = 10
+  const totalPages = Math.ceil(appointmentsData.length / itemsPerPage)
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 1024)
+      setIsSidebarOpen(window.innerWidth >= 1024)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
+
+  const handleSendTemporaryPassword = () => {
+    console.log("Sending temporary password...")
   }
 
+  const paginatedAppointments = appointmentsData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'dark bg-gray-900' : 'bg-gray-100'}`}>
-      <nav className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow-sm">
-        <div className="flex items-center space-x-4">
-          <img src="/placeholder.svg?height=40&width=40" alt="Ageng Logo" className="w-10 h-10" />
-          <h1 className="text-2xl font-bold text-purple-600 dark:text-purple-400">Ageng</h1>
+    <div className={`flex flex-col h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
+      {/* Header */}
+      <header className="flex justify-between items-center p-4 border-b border-gray-700 h-16">
+        <div className="flex items-center cursor-pointer" onClick={toggleSidebar}>
+          <img src="/placeholder.svg?height=32&width=32" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
+          <span className="text-xl font-bold">CarePulse</span>
         </div>
-        <div className="flex-1 max-w-xl mx-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search here..."
-              className="w-full py-2 pl-10 pr-4 text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600"
-            />
-            <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+        <div className="flex items-center">
+          <img src="/placeholder.svg?height=32&width=32" alt="Admin Avatar" className="w-8 h-8 rounded-full" />
+          <span className="ml-2">Staff Manager</span>
+        </div>
+      </header>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <aside className={`${isSidebarOpen ? 'block' : 'hidden'} lg:block fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-200 ease-in-out ${isSmallScreen && !isSidebarOpen ? '-translate-x-full' : 'translate-x-0'} h-[calc(100vh-4rem)] flex flex-col`}>
+          <div className="flex justify-between items-center p-4 border-b border-gray-700">
+            <span className="text-xl font-bold">Menu</span>
+            {isSmallScreen && (
+              <Button variant="ghost" size="icon" onClick={toggleSidebar}>
+                <X className="h-6 w-6" />
+              </Button>
+            )}
           </div>
-        </div>
-        <div className="flex items-center space-x-4">
-          <Globe className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <ArrowUpRight className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <Users className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <FileText className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <User className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <Share2 className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <RotateCcw className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <HelpCircle className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <Bell className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <Settings className="h-6 w-6 text-gray-600 dark:text-gray-400" />
-          <Avatar>
-            <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-        </div>
-      </nav>
+          <nav className="flex-1 overflow-y-auto">
+            <div className="px-4 py-2">
 
-      <main className="p-6">
-        <div className="mb-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-2xl font-bold">Trends</CardTitle>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-1">
-                  <span className="w-3 h-3 bg-pink-400 rounded-full"></span>
-                  <span className="text-sm font-medium">$1,245</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <span className="w-3 h-3 bg-purple-500 rounded-full"></span>
-                  <span className="text-sm font-medium">$1,356</span>
-                </div>
-                <Select defaultValue="month">
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select a timeframe" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="day">Day</SelectItem>
-                    <SelectItem value="week">Week</SelectItem>
-                    <SelectItem value="month">Month</SelectItem>
-                    <SelectItem value="year">Year</SelectItem>
-                  </SelectContent>
-                </Select>
+              <Button variant="ghost" className="w-full justify-start mb-2" onClick={() => router.push('/login/staff/dashboard/')}>
+                <Home className="mr-2 h-4 w-4" />
+                Dashboard
+              </Button>
+              <Button variant="ghost" className="w-full justify-start mb-2">
+                <User className="mr-2 h-4 w-4" />
+                Employees
+              </Button>
+              <Button variant="ghost" className="w-full justify-start mb-2">
+                <Calendar className="mr-2 h-4 w-4" />
+                Employee Progress
+              </Button>
+              <Button variant="ghost" className="w-full justify-start mb-2">
+                <Users className="mr-2 h-4 w-4" />
+                Work Shifts
+              </Button>
+              
+            </div>
+          </nav>
+          <div className="p-4 border-t border-gray-700">
+            <Button variant="ghost" className="w-full justify-start mb-2" onClick={toggleDarkMode}>
+              {isDarkMode ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
+              {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            </Button>
+            <Button variant="ghost" className="w-full justify-start mb-2">
+              <FileText className="mr-2 h-4 w-4" />
+              Export PDF
+            </Button>
+          </div>
+          <div className="p-4 border-t border-gray-700 mt-36">
+          <Button variant="ghost" className="w-full justify-start mb-2">
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </Button>
+            <div className="flex items-center mb-2">
+              <img src="/placeholder.svg?height=40&width=40" alt="User Avatar" className="w-10 h-10 rounded-full mr-3" />
+              <div>
+                <div className="font-semibold">John Doe</div>
+                <div className="text-sm text-gray-400">john@example.com</div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="value1" fill="#f472b6" />
-                  <Bar dataKey="value2" fill="#8b5cf6" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+            <Button variant="ghost" className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900">
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
+          </div>
+        </aside>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Sales Trends</CardTitle>
-            </CardHeader>
-            <CardContent>
+        {/* Main Content */}
+        <main className={`flex-grow px-4 sm:px-6 lg:px-8 ${isSidebarOpen ? '' : ''}`}>
+          <div className="h-[calc(100vh-4rem)] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-3xl font-bold">Welcome, Staff Manager</h1>
+              <Dialog open={isNewEmployeeFormOpen} onOpenChange={setIsNewEmployeeFormOpen}>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add New Employee
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+                  <DialogHeader>
+                    <DialogTitle>Add New Employee</DialogTitle>
+                  </DialogHeader>
+                  <form className="space-y-4">
+                    <div>
+                      <Label htmlFor="name">Name</Label>
+                      <Input id="name" placeholder="Enter employee name" />
+                    </div>
+                    <div>
+                      <Label htmlFor="email">Email</Label>
+                      <Input id="email" type="email" placeholder="Enter employee email" />
+                    </div>
+                    <div>
+                      <Label htmlFor="role">Role</Label>
+                      <Select value={selectedRole} onValueChange={setSelectedRole}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="doctor">Doctor</SelectItem>
+                          <SelectItem value="nurse">Nurse</SelectItem>
+                          <SelectItem value="receptionist">Receptionist</SelectItem>
+                          <SelectItem value="admin">Admin</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="startDate">Start Date</Label>
+                      <Input id="startDate" type="date" />
+                    </div>
+                    <div className="flex justify-between">
+                      <Button type="submit" className="w-1/2 mr-2">Add Employee</Button>
+                      <Button type="button" variant="outline" className="w-1/2 ml-2" onClick={handleSendTemporaryPassword}>
+                        <Send className="mr-2 h-4 w-4" />
+                        Send Temp Password
+                      </Button>
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {statsData.map((stat, index) => (
+                <div key={index} className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} transition-colors duration-300 hover:shadow-lg`}>
+                  <div className="text-3xl mb-2">{stat.icon} {stat.value}</div>
+                  <div className="text-sm">{stat.title}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className={`overflow-x-auto rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} transition-colors duration-300`}>
               <table className="w-full">
                 <thead>
-                  <tr>
-                    <th className="text-left font-medium text-gray-500">Product Name</th>
-                    <th className="text-right font-medium text-gray-500">Rate</th>
+                  <tr className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                    <th className="p-2 text-left">Patient</th>
+                    <th className="p-2 text-left">Date</th>
+                    <th className="p-2 text-left">Status</th>
+                    <th className="p-2 text-left">Doctor</th>
+                    <th className="p-2 text-left">Actions</th>
+                    <th className="p-2 text-left">OTP</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {salesTrendsData.map((item, index) => (
-                    <tr key={index}>
-                      <td className="py-2">{item.name}</td>
-                      <td className={`text-right ${item.trend > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {item.trend > 0 ? '▲' : '▼'} {Math.abs(item.trend)}%
+                  {paginatedAppointments.map((appointment, index) => (
+                    <tr key={index} className={`${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'} transition-colors duration-300`}>
+                      <td className="p-2">{appointment.patient}</td>
+                      <td className="p-2">{appointment.date}</td>
+                      <td className="p-2">
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          appointment.status === 'Scheduled' ? 'bg-green-500 text-white' :
+                          appointment.status === 'Pending' ? 'bg-yellow-500 text-black' :
+                          'bg-red-500 text-white'
+                        }`}>
+                          {appointment.status}
+                        </span>
+                      </td>
+                      <td className="p-2">{appointment.doctor}</td>
+                      <td className="p-2">
+                        <Button variant="outline" size="sm" className="mr-2">
+                          <Calendar className="mr-1 h-4 w-4" />
+                          Schedule
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <X className="mr-1 h-4 w-4" />
+                          Cancel
+                        </Button>
+                      </td>
+                      <td className="p-2">
+                        <Button variant="outline" size="sm">
+                          <MessageCircle className="mr-1 h-4 w-4" />
+                          OTP
+                        </Button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            </CardContent>
-          </Card>
+            </div>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle>Product Sales</CardTitle>
-              <Select defaultValue="month">
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select a timeframe" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="day">Day</SelectItem>
-                  <SelectItem value="week">Week</SelectItem>
-                  <SelectItem value="month">Month</SelectItem>
-                  <SelectItem value="year">Year</SelectItem>
-                </SelectContent>
-              </Select>
-            </CardHeader>
-            <CardContent>
-              <table className="w-full">
-                <tbody>
-                  {productSalesData.map((item, index) => (
-                    <tr key={index}>
-                      <td className="py-2">
-                        <div className="flex items-center space-x-2">
-                          <div className={`w-2 h-2 rounded-full ${COLORS[index % COLORS.length]}`}></div>
-                          <span>{item.name}</span>
-                        </div>
-                      </td>
-                      <td className="text-right">{item.sold} / 1000 Sold</td>
-                      <td className={`text-right ${item.trend > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {item.trend > 0 ? '▲' : '▼'} {Math.abs(item.trend)}%
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Earnings Categories</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex justify-center mb-4">
-                <ResponsiveContainer width={200} height={200}>
-                  <PieChart>
-                    <Pie
-                      data={earningsCategoriesData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {earningsCategoriesData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <table className="w-full">
-                <tbody>
-                  {earningsCategoriesData.map((item, index) => (
-                    <tr key={index}>
-                      <td className="py-2">
-                        <div className="flex items-center space-x-2">
-                          <div className={`w-2 h-2 rounded-full ${COLORS[index % COLORS.length]}`}></div>
-                          <span>{item.name} ({item.percentage}%)</span>
-                        </div>
-                      </td>
-                      <td className="text-right">${item.value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
-
-      <div className="fixed bottom-4 right-4 flex items-center space-x-2 bg-white dark:bg-gray-800 p-2 rounded-full shadow">
-        <Sun className="h-5 w-5 text-yellow-500" />
-        <Switch checked={isDarkMode} onCheckedChange={toggleTheme} />
-        <Moon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+            <div className="flex justify-between items-center mt-4">
+              <Button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="mr-2 h-4 w-4" />
+                Previous
+              </Button>
+              <span>Page {currentPage} of {totalPages}</span>
+              <Button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+              >
+                Next
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </main> 
       </div>
     </div>
   )
