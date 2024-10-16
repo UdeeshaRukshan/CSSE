@@ -1,8 +1,9 @@
 'use client'; // This makes the component a Client Component
-
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const LoginForm = () => {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -12,6 +13,10 @@ const LoginForm = () => {
         e.preventDefault();
         // Handle form submission logic here
         console.log('Form submitted:', formData);
+        
+            router.push('/login/admin'); // Navigate to the sign-up page
+        
+    
     };
 
     const handleChange = (e) => {

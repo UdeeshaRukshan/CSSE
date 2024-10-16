@@ -1,4 +1,4 @@
-// File: /Users/udeesharukshan/Documents/Y3S2/CSSE_FP/CSSE/app/page.tsx
+// File: /Users/udeesharukshan/Documents/Y3S2/CSSE_FP/CSSE/app/page.js
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

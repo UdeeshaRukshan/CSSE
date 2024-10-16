@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import axios from 'axios';
 import { Form } from "@/components/ui/form";
-import { createUser } from "@/lib/actions/patient.actions";
 import { UserFormValidation } from "@/lib/validation";
 
 import "react-phone-number-input/style.css";
@@ -29,24 +28,50 @@ export const PatientForm = () => {
 
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
-
+   
     try {
       const user = {
         name: values.name,
         email: values.email,
         phone: values.phone,
       };
+      console.log('User object:', user);
+  
+      const response = await axios.post(`http://localhost:4000/api/users`, user);
+      console.log('Full Response Object:', response); // Log the entire response object
+  
+      if (response.data) {
+        console.log('This is the response:', response.data);
+        console.log('User Name:', response.data.user.name); // Correctly access User Name
+        console.log('User ID:', response.data.user._id); // Correctly access User ID
+  
+        // Only navigate if the ID is defined
+        if (response.data.user._id) {
+          // router.push(`/login/patients/login/${response.data.user._id}/register`);
+          const userId=response.data.user._id;
 
-      const newUser = await createUser(user);
-
-      if (newUser) {
-        router.push(`/patients/${newUser.$id}/register`);
+          router.push(`/login/patients/login/register`);
+          
+        } else {
+          console.error('User ID is undefined.');
+        //  setErrorMessage("User ID is undefined."); // Set error message
+        }
+      } else {
+        console.error('Response data is undefined');
+        //setErrorMessage("Response data is undefined."); // Set error message
       }
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        console.error('Error response data:', error.response?.data);
+        console.error('Error status:', error.response?.status);
+        //setErrorMessage(error.response?.data?.message || "An error occurred."); // Set error message
+      } else {
+        console.error('An error occurred:', error);
+        //setErrorMessage("An error occurred."); // Set error message
+      }
+    } finally {
+      setIsLoading(false); // Ensure loading state is reset
     }
-
-    setIsLoading(false);
   };
 
   return (
