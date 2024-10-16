@@ -3,6 +3,13 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Cookies from 'js-cookie'; // Import js-cookie to handle cookies
+import {
+  MDBContainer,
+  MDBInput,
+  MDBCheckbox,
+  MDBBtn,
+  MDBIcon
+} from 'mdb-react-ui-kit';
 
 const PatientLoginPage = () => {
     const router = useRouter();
@@ -44,50 +51,70 @@ const PatientLoginPage = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-black">
-            <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h1 className="text-3xl font-bold text-center text-white mb-8">Patient Login</h1>
-                {error && <p className="text-red-500 text-center">{error}</p>}
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="form-group">
-                        <label htmlFor="email" className="block text-gray-300 font-semibold">Email</label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" 
-                            required 
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password" className="block text-gray-300 font-semibold">Password</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" 
-                            required 
-                        />
-                    </div>
-                    <button 
-                        type="submit" 
-                        className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 rounded-lg font-semibold transition duration-300"
-                    >
-                        Login
-                    </button>
-                </form>
-                <div className="mt-4 text-center">
-                    <button 
-                        onClick={handleSignUp} 
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold transition duration-300"
-                    >
-                        Sign Up
-                    </button>
+        <MDBContainer className="p-3 my-5 d-flex flex-column w-50">
+            <h1 className="text-3xl font-bold text-center text-dark mb-4">Patient Login</h1>
+            {error && <p className="text-danger text-center mb-4">{error}</p>}
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <MDBInput 
+                    wrapperClass='mb-4' 
+                    label='Email address' 
+                    id='form1' 
+                    type='email'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+                <MDBInput 
+                    wrapperClass='mb-4' 
+                    label='Password' 
+                    id='form2' 
+                    type='password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+
+                <div className="d-flex justify-content-between mb-4">
+                    <MDBCheckbox 
+                        name='flexCheck' 
+                        value='' 
+                        id='flexCheckDefault' 
+                        label='Remember me' 
+                    />
+                    <a href="!#">Forgot password?</a>
+                </div>
+
+                <MDBBtn 
+                    className="w-100 mb-4" 
+                    type="submit"
+                >
+                    Sign in
+                </MDBBtn>
+            </form>
+
+            <div className="text-center">
+                <p>Not a member? <a href="/login/patients/login/content" onClick={handleSignUp}>Register</a></p>
+                <p>or sign up with:</p>
+
+                <div className='d-flex justify-content-between mx-auto' style={{ width: '40%' }}>
+                    <MDBBtn tag='a' color='none' className='m-1' style={{ color: '#1266f1' }}>
+                        <MDBIcon fab icon='facebook-f' size="sm"/>
+                    </MDBBtn>
+
+                    <MDBBtn tag='a' color='none' className='m-1' style={{ color: '#1266f1' }}>
+                        <MDBIcon fab icon='twitter' size="sm"/>
+                    </MDBBtn>
+
+                    <MDBBtn tag='a' color='none' className='m-1' style={{ color: '#1266f1' }}>
+                        <MDBIcon fab icon='google' size="sm"/>
+                    </MDBBtn>
+
+                    <MDBBtn tag='a' color='none' className='m-1' style={{ color: '#1266f1' }}>
+                        <MDBIcon fab icon='github' size="sm"/>
+                    </MDBBtn>
                 </div>
             </div>
-        </div>
+        </MDBContainer>
     );
 };
 

@@ -1,0 +1,4 @@
+{
+  "/login/patients/login/page": "app/login/patients/login/page.js",
+  "/login/patients/login/content/page": "app/login/patients/login/content/page.js"
+}

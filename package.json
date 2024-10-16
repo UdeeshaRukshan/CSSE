@@ -32,6 +32,7 @@
     "input-otp": "^1.2.4",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.378.0",
+    "mdb-react-ui-kit": "^9.0.0",
     "next": "14.2.3",
     "next-themes": "^0.3.0",
     "node-appwrite": "^12.0.1",
