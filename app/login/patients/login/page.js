@@ -30,7 +30,7 @@ const PatientLoginPage = () => {
                 Cookies.set('userId', data.userId, { expires: 1 }); 
                 Cookies.set('authToken', data.authToken, { expires: 1 }); 
 
-                router.push(`/login/patients/login/content`);
+                router.push(`login/patients/login/new-appointment`);
             } else {
                 setError('Invalid email or password.');
             }
@@ -40,7 +40,7 @@ const PatientLoginPage = () => {
     };
 
     const handleSignUp = () => {
-        router.push('/login/patients/login/content'); // Navigate to the sign-up page
+        router.push('/login/patients/login/content'); 
     };
 
     return (
