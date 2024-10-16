@@ -47,7 +47,11 @@ export const PatientForm = () => {
   
         // Only navigate if the ID is defined
         if (response.data.user._id) {
-          router.push(`/login/patients/login/${response.data.user._id}/register`);
+          // router.push(`/login/patients/login/${response.data.user._id}/register`);
+          const userId=response.data.user._id;
+
+          router.push(`/login/patients/login/register`);
+          
         } else {
           console.error('User ID is undefined.');
         //  setErrorMessage("User ID is undefined."); // Set error message
@@ -62,8 +66,8 @@ export const PatientForm = () => {
         console.error('Error status:', error.response?.status);
         //setErrorMessage(error.response?.data?.message || "An error occurred."); // Set error message
       } else {
-        console.error('Error message:', error.message);
-        //setErrorMessage(error.message); // Set error message
+        console.error('An error occurred:', error);
+        //setErrorMessage("An error occurred."); // Set error message
       }
     } finally {
       setIsLoading(false); // Ensure loading state is reset

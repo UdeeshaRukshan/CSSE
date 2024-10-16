@@ -17,7 +17,7 @@ import {
   IdentificationTypes,
   PatientFormDefaultValues,
 } from "@/constants";
-
+import { registerPatient } from "@/lib/actions/patient.actions";
 import { PatientFormValidation } from "@/lib/validation";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -87,12 +87,12 @@ const RegisterForm = ({ user }: { user: User }) => {
 
       const newPatient = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/patients`, patient);
       if (newPatient.status === 201) {
-        const newPatientId = newPatient.data.patients._id; // Adjust this based on your API response structure
+        const newPatientId = newPatient.data.patient._id; // Adjust this based on your API response structure
 
         // Redirect to the new appointment page
         router.push(`/login/patients/login/${newPatientId}/new-appointment`);
     } else {
-        console.log('Failed to create a new patient:', newPatient.data.patients);
+        console.log('Failed to create a new patient:', newPatient.data.patient);
     }
     } catch (error) {
       console.log(error);
