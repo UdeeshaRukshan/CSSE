@@ -251,7 +251,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useRouter } from 'next/navigation'
-import SideBar from './components/SideBar'
+import SideBar from '../components/SideBar'
 
 const appointmentsData = [
   { patient: 'Phoenix Baker', date: 'Jan 4, 2022', status: 'Scheduled', doctor: 'Dr. Alex Ramirez' },
@@ -273,7 +273,7 @@ const statsData = [
   { title: 'Total number of cancelled appointments', value: 56, icon: '❌' },
 ]
 
-export default function Dashboard() {
+export default function Employees() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isNewEmployeeFormOpen, setIsNewEmployeeFormOpen] = useState(false)
@@ -308,7 +308,7 @@ export default function Dashboard() {
   )
 
   return (
-    <div className={`flex flex-col h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
+    <div className={`flex flex-col ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
       {/* Header */}
       <header className="flex justify-between items-center p-4 border-b border-gray-700 h-16">
         <div className="flex items-center cursor-pointer" onClick={toggleSidebar}>
@@ -328,7 +328,9 @@ export default function Dashboard() {
           isDarkMode={isDarkMode} 
           isSmallScreen={isSmallScreen} 
           toggleSidebar={toggleSidebar} 
-          toggleDarkMode={toggleDarkMode} 
+          toggleDarkMode={toggleDarkMode}
+          appointmentData={appointmentsData}
+          statsData={statsData}
         />
         {/* Main Content */}
         <main className={`flex-grow px-4 sm:px-6 lg:px-8 ${isSidebarOpen ? '' : ''}`}>
