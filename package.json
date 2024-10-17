@@ -42,6 +42,7 @@
     "fs": "^0.0.1-security",
     "input-otp": "^1.2.4",
     "js-cookie": "^3.0.5",
+    "jspdf": "^2.5.2",
     "lucide-react": "^0.378.0",
     "mdb-react-ui-kit": "^9.0.0",
     "next": "14.2.3",

@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -16,6 +15,7 @@ import SubmitButton from "../SubmitButton";
 export const PatientForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
@@ -23,54 +23,51 @@ export const PatientForm = () => {
       name: "",
       email: "",
       phone: "",
+      password: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof UserFormValidation>) => {
     setIsLoading(true);
-   
+    setErrorMessage(""); // Reset error message
+
     try {
       const user = {
         name: values.name,
         email: values.email,
         phone: values.phone,
+        password: values.password,
       };
       console.log('User object:', user);
   
-      const response = await axios.post(`http://localhost:4000/api/users`, user);
-      console.log('Full Response Object:', response); // Log the entire response object
+      const response = await axios.post(`http://localhost:4000/api/users/signup`, user);
+      console.log('Full Response Object:', response);
   
       if (response.data) {
         console.log('This is the response:', response.data);
-        console.log('User Name:', response.data.user.name); // Correctly access User Name
-        console.log('User ID:', response.data.user._id); // Correctly access User ID
-  
-        // Only navigate if the ID is defined
-        if (response.data.user._id) {
-          // router.push(`/login/patients/login/${response.data.user._id}/register`);
-          const userId=response.data.user._id;
+        const userId = response.data.user._id;
 
-          router.push(`/login/patients/login/register`);
-          
+        if (userId) {
+          router.push(`/login/patients/login/reg`);
         } else {
           console.error('User ID is undefined.');
-        //  setErrorMessage("User ID is undefined."); // Set error message
+          setErrorMessage("User ID is undefined.");
         }
       } else {
         console.error('Response data is undefined');
-        //setErrorMessage("Response data is undefined."); // Set error message
+        setErrorMessage("Response data is undefined.");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Error response data:', error.response?.data);
         console.error('Error status:', error.response?.status);
-        //setErrorMessage(error.response?.data?.message || "An error occurred."); // Set error message
+        setErrorMessage(error.response?.data?.message || "An error occurred.");
       } else {
         console.error('An error occurred:', error);
-        //setErrorMessage("An error occurred."); // Set error message
+        setErrorMessage("An error occurred.");
       }
     } finally {
-      setIsLoading(false); // Ensure loading state is reset
+      setIsLoading(false);
     }
   };
 
@@ -81,6 +78,8 @@ export const PatientForm = () => {
           <h1 className="header">Hi there 👋</h1>
           <p className="text-dark-700">Get started with appointments.</p>
         </section>
+
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
 
         <CustomFormField
           fieldType={FormFieldType.INPUT}
@@ -109,8 +108,18 @@ export const PatientForm = () => {
           label="Phone number"
           placeholder="(555) 123-4567"
         />
+         
+        <CustomFormField
+          fieldType={FormFieldType.INPUT}
+          control={form.control}
+          name="password"
+          label="Password"
+          placeholder="Enter your password"
+        />
 
-        <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+        <SubmitButton isLoading={isLoading} >
+          Get Started
+        </SubmitButton>
       </form>
     </Form>
   );

@@ -1,5 +1,6 @@
 "use client";
-
+import React from 'react';
+import { jsPDF } from 'jspdf';
 import { useState, useEffect } from "react";
 import { Plus, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -58,6 +59,28 @@ export default function Employees() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
+  const generatePDF = (appointment) => {
+    const doc = new jsPDF();
+
+    // Set up the title and header styles
+    doc.setFontSize(20);
+    doc.text('Appointment Details', 14, 22);
+    doc.setFontSize(12);
+    
+    // Add a line for separation
+    doc.line(14, 25, 196, 25);
+    
+    // Add appointment details
+    doc.setFontSize(12);
+    doc.text(`Doctor: ${appointment.doctor}`, 14, 30);
+    doc.text(`Scheduled: ${new Date(appointment.schedule).toLocaleString()}`, 14, 35);
+    doc.text(`Reason: ${appointment.reason}`, 14, 40);
+    doc.text(`Status: ${appointment.status}`, 14, 45);
+    doc.text(`Note: ${appointment.note}`, 14, 50);
+
+    // Save the PDF
+    doc.save(`appointment_${appointment._id}.pdf`);
+  };
   // Function to delete an appointment
   const deleteAppointment = async (appointmentId) => {
     try {
@@ -355,103 +378,78 @@ export default function Employees() {
             </div>
 
             {/* Appointment Table */}
-            <TableContainer
-              component={Paper}
-              sx={{
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                borderRadius: "8px",
-                overflow: "hidden",
+            <TableContainer component={Paper} sx={{ boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', borderRadius: '8px', overflow: 'hidden' }}>
+      <Table>
+        <TableHead sx={{ backgroundColor: '#002f5c' }}>
+          <TableRow>
+            <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>Doctor</TableCell>
+            <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>Scheduled</TableCell>
+            <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>Reason</TableCell>
+            <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>Status</TableCell>
+            <TableCell sx={{ color: 'white', fontWeight: 'bold', fontSize: '1.2rem' }}>Action</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {appointments.map((appointment) => (
+            <TableRow 
+              key={appointment._id} 
+              sx={{ 
+                backgroundColor: '#fff', 
+                '&:nth-of-type(even)': { backgroundColor: '#f9f9f9' }, 
+                '&:hover': { backgroundColor: '#f0f0f0' } 
               }}
             >
-              <Table>
-                <TableHead sx={{ backgroundColor: "#002f5c", color: "white" }}>
-                  <TableRow>
-                    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                      Doctor
-                    </TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                      Scheduled
-                    </TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                      Reason
-                    </TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                      Status
-                    </TableCell>
-                    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-                      Action
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {appointments.map((appointment) => (
-                    <TableRow
-                      key={appointment._id}
-                      sx={{
-                        backgroundColor: "#fff",
-                        "&:nth-of-type(even)": { backgroundColor: "#f9f9f9" },
-                        "&:hover": { backgroundColor: "#f0f0f0" },
-                      }}
-                    >
-                      <TableCell>{appointment.doctor}</TableCell>
-                      <TableCell>
-                        {new Date(appointment.schedule).toLocaleString()}
-                      </TableCell>
-                      <TableCell>{appointment.reason}</TableCell>
-                      <TableCell>{appointment.status}</TableCell>
-                      <TableCell>
-                        {/* Download Button */}
-                        <IconButton
-                          sx={{
-                            backgroundColor: "blue !important",
-                            color: "white !important",
-                            "&:hover": {
-                              backgroundColor: "darkblue !important",
-                            },
-                            marginRight: "8px",
-                            borderRadius: "4px",
-                          }}
-                          onClick={() => downloadAppointment(appointment)}
-                        >
-                          <DownloadIcon />
-                        </IconButton>
+              <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#333' }}>{appointment.doctor}</TableCell>
+              <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#333' }}>{new Date(appointment.schedule).toLocaleString()}</TableCell>
+              <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#333' }}>{appointment.reason}</TableCell>
+              <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#333' }}>{appointment.status}</TableCell>
+              <TableCell>
+                {/* Download Button */}
+                <IconButton
+                  sx={{
+                    backgroundColor: 'blue !important',
+                    color: 'white !important',
+                    '&:hover': { backgroundColor: 'darkblue !important' },
+                    marginRight: '8px',
+                    borderRadius: '4px',
+                  }}
+                  onClick={() => generatePDF(appointment)}
+                >
+                  <DownloadIcon />
+                </IconButton>
 
-                        {/* Delete Button */}
-                        <IconButton
-                          sx={{
-                            backgroundColor: "red !important",
-                            color: "white !important",
-                            "&:hover": {
-                              backgroundColor: "darkred !important",
-                            },
-                            marginRight: "8px",
-                            borderRadius: "4px",
-                          }}
-                          onClick={() => handleDeleteAppointment(appointment)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                {/* Delete Button */}
+                <IconButton
+                  sx={{
+                    backgroundColor: 'red !important',
+                    color: 'white !important',
+                    '&:hover': { backgroundColor: 'darkred !important' },
+                    marginRight: '8px',
+                    borderRadius: '4px',
+                  }}
+                  onClick={() => handleDeleteAppointment(appointment)}
+                >
+                  <DeleteIcon />
+                </IconButton>
 
-                        {/* Cancel Button */}
-                        <IconButton
-                          sx={{
-                            backgroundColor: "yellow !important",
-                            color: "black !important",
-                            "&:hover": {
-                              backgroundColor: "goldenrod !important",
-                            },
-                            borderRadius: "4px",
-                          }}
-                          onClick={() => handleCancelAppointment(appointment)}
-                        >
-                          <CancelIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                {/* Cancel Button */}
+                <IconButton
+                  sx={{
+                    backgroundColor: 'yellow !important',
+                    color: 'black !important',
+                    '&:hover': { backgroundColor: 'goldenrod !important' },
+                    borderRadius: '4px',
+                  }}
+                  onClick={() => handleCancelAppointment(appointment)}
+                >
+                  <CancelIcon />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
           </div>
         </main>
       </div>
