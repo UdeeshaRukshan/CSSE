@@ -11,10 +11,10 @@ const Appointment = () => {
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true); // For handling loading state
   const [error, setError] = useState(null); // For handling errors
-  const router = useRouter(); // Use Next.js router for redirection
+  const router = useRouter(); 
   const [uId, setUserId] = useState(null);
   useEffect(() => {
-    const userId = Cookies.get("userId"); // Moved userId inside useEffect
+    const userId = Cookies.get("userId"); 
     setUserId(userId);
     const fetchPatientData = async () => {
       try {

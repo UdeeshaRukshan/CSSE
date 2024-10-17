@@ -35,11 +35,12 @@ import IconButton from "@mui/material/IconButton";
 import DownloadIcon from "@mui/icons-material/Download";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CancelIcon from "@mui/icons-material/Cancel";
+import Cookies from 'js-cookie';
 
 export default function Employees() {
   const [appointments, setAppointments] = useState([]);
   const [scheduledCount, setScheduledCount] = useState(0);
-  const [pendingCount, setPendingCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
   const [cancelledCount, setCancelledCount] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -155,10 +156,12 @@ export default function Employees() {
   };
 
   useEffect(() => {
+    const userId = Cookies.get("userId");
+    console.log(userId);
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/appointment`
+          `${process.env.NEXT_PUBLIC_API_URL}/appointment/user/${userId}`
         );
         const appointmentsData = response.data;
         setAppointments(appointmentsData);
@@ -167,8 +170,8 @@ export default function Employees() {
         setScheduledCount(
           appointmentsData.filter((app) => app.status === "scheduled").length
         );
-        setPendingCount(
-          appointmentsData.filter((app) => app.status === "scheduled").length
+        setTotalCount(
+          appointmentsData.length
         );
         setCancelledCount(
           appointmentsData.filter((app) => app.status === "cancelled").length
@@ -264,7 +267,7 @@ export default function Employees() {
           isDarkMode={isDarkMode}
           toggleSidebar={toggleSidebar}
           scheduledCount={scheduledCount}
-          pendingCount={pendingCount}
+          pendingCount={totalCount}
           cancelledCount={cancelledCount}
         />
 
@@ -367,8 +370,8 @@ export default function Employees() {
                   <p className="text-2xl">{scheduledCount}</p>
                 </div>
                 <div className="bg-yellow-500 p-4 rounded-lg">
-                  <p className="font-bold">Pending</p>
-                  <p className="text-2xl">{pendingCount}</p>
+                  <p className="font-bold">Total</p>
+                  <p className="text-2xl">{totalCount}</p>
                 </div>
                 <div className="bg-red-500 p-4 rounded-lg">
                   <p className="font-bold">Cancelled</p>

@@ -12,20 +12,22 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const AdminPage = () => {
   const [appointments, setAppointments] = useState([]);
   const [scheduledCount, setScheduledCount] = useState(0);
-  const [pendingCount, setPendingCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
   const [cancelledCount, setCancelledCount] = useState(0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const userId = Cookies.get("userId");
+    console.log(userId);
     const fetchAppointments = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/appointment`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/appointment/user/${userId}`);
         const appointmentsData = response.data;
         console.log(appointmentsData);
         setAppointments(appointmentsData);
 
         setScheduledCount(appointmentsData.filter(app => app.status === 'scheduled').length);
-        setPendingCount(appointmentsData.filter(app => app.status === 'pending').length);
+        setTotalCount(appointmentsData.length);
         setCancelledCount(appointmentsData.filter(app => app.status === 'cancelled').length);
       } catch (err) {
         setError('Error fetching appointments. Please try again later.');
@@ -66,7 +68,7 @@ const AdminPage = () => {
             className="h-8 w-fit"
           />
         </Link>
-        <h2 className="text-center">Admin Dashboard</h2>
+        <h2 className="text-center">Patient Dashboard</h2>
       </header>
 
       <main className="admin-main">

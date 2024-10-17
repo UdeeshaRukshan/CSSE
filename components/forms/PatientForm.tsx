@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import axios from 'axios';
+import Cookies from 'js-cookie'; // Import js-cookie
 import { Form } from "@/components/ui/form";
 import { UserFormValidation } from "@/lib/validation";
 
@@ -45,9 +46,16 @@ export const PatientForm = () => {
   
       if (response.data) {
         console.log('This is the response:', response.data);
-        const userId = response.data.user._id;
+        const userId = response.data.userId; 
 
+        console.log('User ID:', userId);
+       // const authToken = response.data.token; // Assuming you return a token
+        
         if (userId) {
+          // Set the token or user ID in a cookie
+          Cookies.set('userId', userId, { expires: 1 }); // Expires in 7 days
+
+          // Redirect user after success
           router.push(`/login/patients/login/reg`);
         } else {
           console.error('User ID is undefined.');

@@ -148,6 +148,26 @@ const cancelAppointment = async (req, res) => {
     }
 };
 
+const getAppointmentsByUserId = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        // Fetch all appointments related to the specific userId
+        const appointments = await Appointment.find({ userId });
+
+        if (appointments.length === 0) {
+            loggerService.warn(`No appointments found for userId: ${userId}`);
+            return res.status(404).json({ message: 'No appointments found for this user' });
+        }
+
+        loggerService.info(`Fetched appointments for userId: ${userId}`);
+        return res.status(200).json(appointments);
+    } catch (error) {
+        loggerService.error(`Error fetching appointments for userId: ${userId}, Error: ${error.message}`);
+        return res.status(500).json({ message: 'Error fetching appointments for this user' });
+    }
+};
+
 // Export the functions using CommonJS
 module.exports = {
     createAppointment,
@@ -155,4 +175,5 @@ module.exports = {
     getAppointmentById,
     deleteAppointment,
     cancelAppointment,
+    getAppointmentsByUserId
 };
