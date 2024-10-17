@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useRouter } from 'next/navigation'
+import { title } from 'process'
 
 const appointmentsData = [
   { patient: 'Phoenix Baker', date: 'Jan 4, 2022', status: 'Scheduled', doctor: 'Dr. Alex Ramirez' },
@@ -65,6 +66,8 @@ export default function Dashboard() {
     currentPage * itemsPerPage
   )
 
+  
+
   return (
     <div className={`flex flex-col h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
       {/* Header */}
@@ -105,7 +108,7 @@ export default function Dashboard() {
                 <Calendar className="mr-2 h-4 w-4" />
                 Employee Progress
               </Button>
-              <Button variant="ghost" className="w-full justify-start mb-2">
+              <Button variant="ghost" className="w-full justify-start mb-2" onClick={()=> router.push('/login/staff/dashboard/workshift')}>
                 <Users className="mr-2 h-4 w-4" />
                 Work Shifts
               </Button>
