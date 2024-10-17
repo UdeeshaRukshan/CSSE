@@ -25,7 +25,7 @@ const createAppointment = async (req, res) => {
   }
 };
 
-// Optionally, you can have a method to fetch appointments
+// Fetch all appointments
 const getAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.find({});
@@ -35,26 +35,69 @@ const getAppointments = async (req, res) => {
     return res.status(500).json({ message: 'Error fetching appointments' });
   }
 };
+
+// Fetch an appointment by ID
 const getAppointmentById = async (req, res) => {
-    const { id } = req.params; // Get ID from request parameters
-  
-    try {
-      const appointment = await Appointment.findById(id); // Find appointment by ID
-  
-      if (!appointment) {
-        return res.status(404).json({ message: 'Appointment not found' });
-      }
-  
-      return res.status(200).json(appointment); // Return the found appointment
-    } catch (error) {
-      console.error('Error fetching appointment by ID:', error);
-      return res.status(500).json({ message: 'Error fetching appointment' });
+  const { id } = req.params; // Get ID from request parameters
+
+  try {
+    const appointment = await Appointment.findById(id); // Find appointment by ID
+
+    if (!appointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
     }
-  };
-  
-  // Export the functions using CommonJS
-  module.exports = {
-    createAppointment,
-    getAppointments,
-    getAppointmentById,
-  };
+
+    return res.status(200).json(appointment); // Return the found appointment
+  } catch (error) {
+    console.error('Error fetching appointment by ID:', error);
+    return res.status(500).json({ message: 'Error fetching appointment' });
+  }
+};
+
+// Delete an appointment
+const deleteAppointment = async (req, res) => {
+  const { id } = req.params; // Get ID from request parameters
+
+  try {
+    const deletedAppointment = await Appointment.findByIdAndDelete(id); // Delete appointment by ID
+
+    if (!deletedAppointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
+
+    return res.status(200).json({ message: 'Appointment deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting appointment:', error);
+    return res.status(500).json({ message: 'Error deleting appointment' });
+  }
+};
+
+// Cancel an appointment (You can customize this according to your needs)
+const cancelAppointment = async (req, res) => {
+  const { id } = req.params; // Get ID from request parameters
+
+  try {
+    const appointment = await Appointment.findById(id); // Find appointment by ID
+
+    if (!appointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
+
+    appointment.status = 'cancelled';
+    await appointment.save();
+
+    return res.status(200).json({ message: 'Appointment canceled successfully', appointment });
+  } catch (error) {
+    console.error('Error canceling appointment:', error);
+    return res.status(500).json({ message: 'Error canceling appointment' });
+  }
+};
+
+// Export the functions using CommonJS
+module.exports = {
+  createAppointment,
+  getAppointments,
+  getAppointmentById,
+  deleteAppointment,
+  cancelAppointment,
+};
