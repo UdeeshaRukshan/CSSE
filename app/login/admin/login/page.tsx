@@ -79,14 +79,14 @@ export default function LoginScreen() {
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:any) => {
     e.preventDefault();
     // Handle form submission logic here
     console.log('Form submitted:', formData);
-    router.push('/login/admin'); // Navigate to the login admin page
+    router.push('/login/admin/dashboard'); // Navigate to the login admin page
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e:any) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -119,7 +119,6 @@ export default function LoginScreen() {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="Enter your username"
-                icon={<User className="text-gray-500" />}
               />
             </div>
             <div>
