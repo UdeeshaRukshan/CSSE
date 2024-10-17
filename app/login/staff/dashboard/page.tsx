@@ -25,10 +25,10 @@ const appointmentsData = [
 
 const statsData = [
   { title: 'Total number of work shifts', value: 94, icon: '📅' },
-  { title: 'Total number of available employees', value: 32, icon: '⏳' },
+  { title: 'Total number of available employees', value: 32, icon: '👨‍💼' },
   { title: 'Total number of workshift cancellation requests', value: 56, icon: '❌' },
-  { title: 'Total number of workshift staff complains', value: 56, icon: '❌' },
-  { title: 'Total number of recruiments ongoing', value: 56, icon: '❌' },
+  { title: 'Total number of workshift staff complains', value: 56, icon: '📄' },
+  { title: 'Total number of recruiments ongoing', value: 56, icon: '👨‍💻' },
 ]
 
 export default function Dashboard() {
