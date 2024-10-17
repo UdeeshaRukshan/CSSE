@@ -31,19 +31,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const encryptedKey =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("accessKey")
-      : null;
-
-  useEffect(() => {
-    const accessKey = encryptedKey && decryptKey(encryptedKey);
-
-    if (accessKey !== process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
-      redirect("/");
-    }
-  }, [encryptedKey]);
-
+  // Removed access key logic
   const table = useReactTable({
     data,
     columns,
@@ -54,7 +42,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="data-table">
       <Table className="shad-table">
-        <TableHeader className=" bg-dark-200">
+        <TableHeader className="bg-dark-200">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="shad-table-row-header">
               {headerGroup.headers.map((header) => {
