@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const db = require('./config/db');
 const patientRoutes = require('./routes/PatientRoutes'); 
+const staffRoutes = require('./routes/StaffRoutes');
 const userRoutes = require('./routes/UserRoutes'); 
 const appointmentRoutes = require('./routes/AppointmentRoutes');
 const app = express();
@@ -24,6 +25,7 @@ db.connect().then(() => {
   app.use('/api/patients', patientRoutes); 
   app.use('/api/users', userRoutes); 
   app.use('/api/appointment', appointmentRoutes);
+  app.use('/api/staff', staffRoutes);
 
 
   app.listen(PORT, () => {
