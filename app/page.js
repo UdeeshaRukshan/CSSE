@@ -1,13 +1,16 @@
-'use client';
-// app/login/page.js
-import { useRouter } from 'next/navigation';
+'use client';  // Ensure it's a client-side component
+
+import { useRouter } from 'next/navigation';  // For Next.js 13+ client-side routing
 
 const LoginPage = () => {
     const router = useRouter();
 
     const handleRoleSelection = (role) => {
-        // Redirect to the corresponding login page based on the selected role
-        router.push(`/login/${role}/login`);
+        if (role) {
+            console.log(`Navigating to: /login/${role}/login`);
+            // Redirect to the corresponding login page based on the selected role
+            router.push(`/login/${role}/login`);
+        }
     };
 
     return (
