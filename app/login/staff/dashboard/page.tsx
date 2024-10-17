@@ -125,7 +125,7 @@ export default function Dashboard() {
               Export PDF
             </Button>
           </div>
-          <div className="p-4 border-t border-gray-700 mt-36">
+          <div className="p-4 border-t border-gray-700 mt-34">
           <Button variant="ghost" className="w-full justify-start mb-2">
                 <Settings className="mr-2 h-4 w-4" />
                 Settings

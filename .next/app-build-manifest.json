@@ -31,15 +31,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/login/staff/dashboard/page.js"
     ],
-    "/login/staff/table/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/login/staff/table/page.js"
-    ],
-    "/login/staff/dashboard/workshift/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/login/staff/dashboard/workshift/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }
