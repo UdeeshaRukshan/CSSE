@@ -1,7 +1,7 @@
-import { findOne, find, findById, findByIdAndUpdate, findByIdAndDelete } from '../models/User';
 import { compare, hash } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import { createTransport } from 'nodemailer'; // For sending temporary password
+import { findOne, find, findById, findByIdAndUpdate, findByIdAndDelete } from '../models/UserModel';
 
 // Generate JWT Token
 const generateToken = (user) => {
@@ -9,41 +9,41 @@ const generateToken = (user) => {
 };
 
 // Login Controller
-export async function loginUser(req, res) {
-  const { email, password } = req.body;
+// export async function loginUser(req, res) {
+//   const { email, password } = req.body;
   
-  try {
-    const user = await findOne({ email });
-    if (!user) return res.status(404).json({ message: 'User not found' });
+//   try {
+//     const user = await findOne({ email });
+//     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const isMatch = await compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+//     const isMatch = await compare(password, user.password);
+//     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const token = generateToken(user);
-    const role = user.role;
+//     const token = generateToken(user);
+//     const role = user.role;
 
-    // Redirect based on role
-    let redirectUrl = '';
-    switch (role) {
-      case 'admin':
-        redirectUrl = '/admin/dashboard';
-        break;
-      case 'doctor':
-        redirectUrl = '/doctor/dashboard';
-        break;
-      case 'patient':
-        redirectUrl = '/patient/dashboard';
-        break;
-      case 'pharmacist':
-        redirectUrl = '/pharmacist/dashboard';
-        break;
-    }
+//     // Redirect based on role
+//     let redirectUrl = '';
+//     switch (role) {
+//       case 'admin':
+//         redirectUrl = '/admin/dashboard';
+//         break;
+//       case 'doctor':
+//         redirectUrl = '/doctor/dashboard';
+//         break;
+//       case 'patient':
+//         redirectUrl = '/patient/dashboard';
+//         break;
+//       case 'pharmacist':
+//         redirectUrl = '/pharmacist/dashboard';
+//         break;
+//     }
 
-    res.json({ token, redirectUrl });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-}
+//     res.json({ token, redirectUrl });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// }
 
 // Get all users
 export async function getAllUsers(req, res) {
