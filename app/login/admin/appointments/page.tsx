@@ -525,7 +525,7 @@ export default function Appointments() {
               </TableHeader>
               <TableBody>
                 {selectedTransactions.map((transaction) => (
-                  <TableRow key={transaction._id} className={`${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'} duration-300`}>
+                  <TableRow key={transaction._id} className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} duration-300`}>
                     <TableCell>{transaction.type}</TableCell>
                     <TableCell>${transaction.amount}</TableCell>
                     <TableCell>{new Date(transaction.date).toLocaleString()}</TableCell>

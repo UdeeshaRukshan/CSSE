@@ -485,6 +485,36 @@ export default function Employees() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     setIsLoading(true)
+  //     setError(null)
+  //     try {
+  //       const response = await fetch('http://localhost:4000/api/users')
+  //       if (!response.ok) {
+  //         throw new Error('Failed to fetch users')
+  //       }
+  //       const data = await response.json()
+  //       const filteredData = data.filter(user => user.role === 'patient')
+
+  //       if (Array.isArray(data)) {
+  //         setUsers(data)
+  //         setFilteredUsers(data)
+  //         toast.success('Users fetched successfully')
+  //       } else {
+  //         throw new Error('Received invalid data format')
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch users:", error)
+  //       setError('Failed to fetch users. Please try again later.')
+  //       toast.error('Failed to fetch users')
+  //     } finally {
+  //       setIsLoading(false)
+  //     }
+  //   }
+  //   fetchUsers()
+  // }, [])
+
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true)
@@ -495,9 +525,16 @@ export default function Employees() {
           throw new Error('Failed to fetch users')
         }
         const data = await response.json()
-        if (Array.isArray(data)) {
-          setUsers(data)
-          setFilteredUsers(data)
+  
+        // Allowed roles
+        const allowedRoles = ['admin', 'pharmacist', 'doctor']
+  
+        // Filter users by roles 'admin', 'pharmacist', 'doctor'
+        const filteredData = data.filter(user => allowedRoles.includes(user.role))
+  
+        if (Array.isArray(filteredData)) {
+          setUsers(filteredData)
+          setFilteredUsers(filteredData)
           toast.success('Users fetched successfully')
         } else {
           throw new Error('Received invalid data format')
@@ -512,11 +549,11 @@ export default function Employees() {
     }
     fetchUsers()
   }, [])
-
+  
   useEffect(() => {
     const filtered = users.filter(user => 
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      user.name.includes(searchTerm) ||
+      user.email.includes(searchTerm)
     ).filter(user => 
       filterRole === "all" || user.role === filterRole // Updated: Changed filtering logic
     )
@@ -679,7 +716,7 @@ export default function Employees() {
         {/* Main Content */}
         <main className={`flex-grow px-4 sm:px-6 lg:px-8`}>
           <div className="h-[calc(100vh-4rem)] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
+            {/* <div className="flex justify-between items-center mb-6">
               <h1 className="text-3xl font-bold">Welcome, Admin</h1>
               <Dialog open={isNewEmployeeFormOpen} onOpenChange={setIsNewEmployeeFormOpen} className='pt-5'>
                 <DialogTrigger asChild>
@@ -725,6 +762,77 @@ export default function Employees() {
                   </form>
                 </DialogContent>
               </Dialog>
+            </div> */}
+
+            <div className="flex justify-between items-center mb-6">
+              <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Welcome, Admin</h1>
+              <Dialog open={isNewEmployeeFormOpen} onOpenChange={setIsNewEmployeeFormOpen} className="pt-5">
+                <DialogTrigger asChild>
+                  <Button className={`${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add New Employee
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+                  <DialogHeader>
+                    <DialogTitle className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Add New Employee</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleAddEmployee} className="space-y-4">
+                    <div>
+                      <Label htmlFor="name" className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Name</Label>
+                      <Input 
+                        id="name" 
+                        name="name" 
+                        placeholder="Enter employee name" 
+                        required 
+                        className={`${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'} border border-gray-300 rounded`} 
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="email" className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Email</Label>
+                      <Input 
+                        id="email" 
+                        name="email" 
+                        type="email" 
+                        placeholder="Enter employee email" 
+                        required 
+                        className={`${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'} border border-gray-300 rounded`} 
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="role" className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Role</Label>
+                      <Select value={selectedRole} onValueChange={setSelectedRole} required>
+                        <SelectTrigger className={`${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'}`}>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                        <SelectContent className={`${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}`}>
+                          <SelectItem value="admin">Admin</SelectItem>
+                          <SelectItem value="doctor">Doctor</SelectItem>
+                          <SelectItem value="patient">Patient</SelectItem>
+                          <SelectItem value="pharmacist">Pharmacist</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex justify-between">
+                      <Button 
+                        type="submit" 
+                        className={`w-1/2 mr-2 ${isDarkMode ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-blue-500 text-white hover:bg-blue-400'}`}
+                      >
+                        Add Employee
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        className={`w-1/2 ml-2 border ${isDarkMode ? 'border-gray-600 text-white hover:bg-gray-600' : 'border-gray-300 text-gray-900 hover:bg-gray-100'}`} 
+                        onClick={() => handleSendTemporaryPassword(selectedUser?._id || '')}
+                      >
+                        <Send className="mr-2 h-4 w-4" />
+                        Send Temp Password
+                      </Button>
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
 
             {/* Search and Filter */}
@@ -747,7 +855,6 @@ export default function Employees() {
                   <SelectItem value="all">All Roles</SelectItem> {/* Updated: Changed "All Roles" option value */}
                   <SelectItem value="admin">Admin</SelectItem>
                   <SelectItem value="doctor">Doctor</SelectItem>
-                  <SelectItem value="patient">Patient</SelectItem>
                   <SelectItem value="pharmacist">Pharmacist</SelectItem>
                 </SelectContent>
               </Select>
@@ -842,7 +949,7 @@ export default function Employees() {
         </main> 
 
          {/* Dialog for Editing Employee */}
-         <Dialog open={isEditEmployeeFormOpen} onOpenChange={setIsEditEmployeeFormOpen}>
+         {/* <Dialog open={isEditEmployeeFormOpen} onOpenChange={setIsEditEmployeeFormOpen}>
           <DialogContent className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
             <DialogHeader>
               <DialogTitle>Edit Employee</DialogTitle>
@@ -876,7 +983,54 @@ export default function Employees() {
               <Button onClick={handleSaveUser} className={`${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors duration-300`}>Save</Button>
             </div>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
+      <Dialog open={isEditEmployeeFormOpen} onOpenChange={setIsEditEmployeeFormOpen}>
+        <DialogContent
+          className={`transition-colors duration-300 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}
+        >
+          <DialogHeader>
+            <DialogTitle className={`${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Edit Employee</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Label className={`${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>Name</Label>
+            <Input
+              value={selectedUser?.name || ''}
+              onChange={(e) => setSelectedUser((prev) => (prev ? { ...prev, name: e.target.value } : null))}
+              className={`border rounded ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-gray-100 text-gray-900 border-gray-300'}`}
+            />
+            <Label className={`${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>Email</Label>
+            <Input
+              type="email"
+              value={selectedUser?.email || ''}
+              onChange={(e) => setSelectedUser((prev) => (prev ? { ...prev, email: e.target.value } : null))}
+              className={`border rounded ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-gray-100 text-gray-900 border-gray-300'}`}
+            />
+            <Label className={`${isDarkMode ? 'text-gray-300' : 'text-gray-900'}`}>Role</Label>
+            <Select value={selectedRole} onValueChange={setSelectedRole}>
+              <SelectTrigger
+                className={`border rounded ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-gray-100 text-gray-900 border-gray-300'}`}
+              >
+                <SelectValue placeholder="Select role" />
+              </SelectTrigger>
+              <SelectContent className={`${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'}`}>
+                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="doctor">Doctor</SelectItem>
+                <SelectItem value="patient">Patient</SelectItem>
+                <SelectItem value="pharmacist">Pharmacist</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="mt-4 flex justify-end">
+            <Button
+              onClick={handleSaveUser}
+              className={`transition-colors duration-300 ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-900 hover:bg-gray-300'}`}
+            >
+              Save
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       </div>
     </div>
   )
