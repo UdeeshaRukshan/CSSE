@@ -39,12 +39,11 @@ const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, isDarkMode, isSmallScr
     router.push('/');
   }
 
-  // Function to generate and download the PDF
   const generateAndDownloadPDF = async () => {
-    console.log("Passing data to pdf: " + data)
     const blob = await pdf(<PDFDocument data={data} statsData={statsData} />).toBlob();
-    saveAs(blob, 'appointment_report.pdf');
+    saveAs(blob, 'employee_report.pdf');
   };
+  
 
   return (
     <aside className={`${isSidebarOpen ? 'block' : 'hidden'} lg:block fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-200 ease-in-out ${isSmallScreen && !isSidebarOpen ? '-translate-x-full' : 'translate-x-0'} h-[calc(100vh-4rem)] flex flex-col`}>

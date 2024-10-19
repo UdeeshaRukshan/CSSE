@@ -1,9 +1,6 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
-// import ChartJSImage from 'chartjs-to-image';
-import { Bar } from 'react-chartjs-2';
-
 
 // Create styles
 const styles = StyleSheet.create({
@@ -22,8 +19,38 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
-    borderBottom: '1 solid #4A5568',
-    paddingBottom: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  table: {
+    display: 'table',
+    width: 'auto',
+    margin: '10px 0',
+  },
+  tableRow: {
+    flexDirection: 'row',
+  },
+  tableCol: {
+    width: '25%',
+    padding: 5,
+  },
+  tableHeader: {
+    backgroundColor: '#f2f2f2',
+    fontWeight: 'bold',
+  },
+  tableCell: {
+    margin: 'auto',
+    fontSize: 10,
+  },
+  statBox: {
+    margin: 5,
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
   headerText: {
     fontSize: 24,
@@ -43,37 +70,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 5,
     color: '#4A5568',
-  },
-  table: {
-    display: 'table',
-    width: 'auto',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRightWidth: 0,
-    borderBottomWidth: 0,
-  },
-  tableRow: {
-    margin: 'auto',
-    flexDirection: 'row',
-  },
-  tableCol: {
-    width: '25%',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderLeftWidth: 0,
-    borderTopWidth: 0,
-  },
-  tableHeader: {
-    backgroundColor: '#EDF2F7',
-    color: '#2D3748',
-    fontWeight: 'bold',
-  },
-  tableCell: {
-    margin: 'auto',
-    marginTop: 5,
-    fontSize: 10,
   },
   pageNumber: {
     position: 'absolute',
@@ -101,105 +97,85 @@ const styles = StyleSheet.create({
   },
 });
 
-const PDFDocument = ({ data, statsData }) => {
-  const [chartUrl, setChartUrl] = useState('');
+// PDFDocument component that generates the PDF report
+const PDFDocument = ({ data = [], statsData = [] }) => {
 
-  const chartData = {
-    labels: statsData.map(stat => stat.title),
-    datasets: [{
-      label: 'Appointments',
-      data: statsData.map(stat => stat.value),
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.8)',
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(255, 206, 86, 0.8)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-      ],
-      borderWidth: 1
-    }]
-  };
+  // Calculate stats based on the users data passed as 'data'
+  const totalUsers = data.length;
+  const roleCounts = data.reduce(
+    (acc, user) => {
+      acc[user.role] = (acc[user.role] || 0) + 1;
+      return acc;
+    },
+    { admin: 0, doctor: 0, nurse: 0, receptionist: 0 }
+  );
+  
+  const joinedThisMonth = data.filter(user => {
+    const createdDate = new Date(user.createdAt);
+    const currentDate = new Date();
+    return (
+      createdDate.getMonth() === currentDate.getMonth() &&
+      createdDate.getFullYear() === currentDate.getFullYear()
+    );
+  }).length;
 
+  // Render the PDF document
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerText}>Appointment Report</Text>
-          <Image
+          <Text style={styles.title}>Employee Report</Text>
+        <Image
             style={styles.logo}
             src="/placeholder.svg?height=50&width=50"
           />
         </View>
 
-        {/* <View style={styles.section}>
-          <Text style={styles.subheader}>Statistics</Text>
-          {chartUrl && (
-            <Image
-              style={styles.chart}
-              src={chartUrl}
-            />
-          )}
-          {statsData.map((stat, index) => (
-            <Text key={index} style={styles.text}>
-              {stat.title}: {stat.value}
-            </Text>
-          ))}
-        </View> */}
+        {/* Stats Section */}
+        <View>
+          <Text style={{ marginBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Stats</Text>
+          <View style={styles.statBox}>
+            <Text>Total Users: {totalUsers}</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text>Admins: {roleCounts.admin}</Text>
+            <Text>Doctors: {roleCounts.doctor}</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text>Nurses: {roleCounts.nurse}</Text>
+            <Text>Receptionists: {roleCounts.receptionist}</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text>Joined This Month: {joinedThisMonth}</Text>
+          </View>
+        </View>
 
-    <View style={styles.section}>
-        <Text style={styles.subheader}>Statistics</Text>
-        <Bar data={chartData} />
-        {statsData.map((stat, index) => (
-          <Text key={index} style={styles.text}>
-            {stat.title}: {stat.value}
-          </Text>
-        ))}
-      </View>
-
-        <View style={styles.section}>
-          <Text style={styles.subheader}>Appointment Details</Text>
+        {/* Users Table */}
+        <View>
+          <Text style={{ marginTop: 20, fontSize: 18, fontWeight: 'bold' }}>Users</Text>
           <View style={styles.table}>
+            {/* Table Header */}
             <View style={[styles.tableRow, styles.tableHeader]}>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>Patient</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>Date</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>Status</Text>
-              </View>
-              <View style={styles.tableCol}>
-                <Text style={styles.tableCell}>Doctor</Text>
-              </View>
+              <Text style={[styles.tableCol, styles.tableCell]}>Name</Text>
+              <Text style={[styles.tableCol, styles.tableCell]}>Email</Text>
+              <Text style={[styles.tableCol, styles.tableCell]}>Role</Text>
+              <Text style={[styles.tableCol, styles.tableCell]}>Created Date</Text>
             </View>
-            {data.map((appointment, index) => (
-              <View style={styles.tableRow} key={index}>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>{appointment.patient}</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>{appointment.date}</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>{appointment.status}</Text>
-                </View>
-                <View style={styles.tableCol}>
-                  <Text style={styles.tableCell}>{appointment.doctor}</Text>
-                </View>
+
+            {/* Table Rows */}
+            {data.map((user) => (
+              <View key={user._id} style={styles.tableRow}>
+                <Text style={styles.tableCol}>{user.name}</Text>
+                <Text style={styles.tableCol}>{user.email}</Text>
+                <Text style={styles.tableCol}>{user.role}</Text>
+                <Text style={styles.tableCol}>
+                  {new Date(user.createdAt).toLocaleDateString()}
+                </Text>
               </View>
             ))}
           </View>
         </View>
-
-        <Text
-          style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
-          fixed
-        />
 
         <View style={styles.footer} fixed>
           <Text>CarePulse Medical Center</Text>
