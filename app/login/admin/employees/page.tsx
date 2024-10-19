@@ -1,250 +1,7 @@
-// import Image from "next/image";
-// import Link from "next/link";
-
-// import { StatCard } from "@/components/StatCard";
-// import { columns } from "@/components/table/columns";
-// import { DataTable } from "@/components/table/DataTable";
-// import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
-
-// const AdminPage = async () => {
-//   const appointments = await getRecentAppointmentList();
-
-//   return (
-//     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
-//       <header className="admin-header">
-//         <Link href="/" className="cursor-pointer">
-//           <Image
-//             src="/assets/icons/logo-full.svg"
-//             height={32}
-//             width={162}
-//             alt="logo"
-//             className="h-8 w-fit"
-//           />
-//         </Link>
-
-//         <p className="text-16-semibold">Admin Dashboard</p>
-//       </header>
-
-//       <main className="admin-main">
-//         <section className="w-full space-y-4">
-//           <h1 className="header">Welcome 👋</h1>
-//           <p className="text-dark-700">
-//             Start the day with managing new appointments
-//           </p>
-//         </section>
-
-//         <section className="admin-stat">
-//           <StatCard
-//             type="appointments"
-//             count={appointments.scheduledCount}
-//             label="Scheduled appointments"
-//             icon={"/assets/icons/appointments.svg"}
-//           />
-//           <StatCard
-//             type="pending"
-//             count={appointments.pendingCount}
-//             label="Pending appointments"
-//             icon={"/assets/icons/pending.svg"}
-//           />
-//           <StatCard
-//             type="cancelled"
-//             count={appointments.cancelledCount}
-//             label="Cancelled appointments"
-//             icon={"/assets/icons/cancelled.svg"}
-//           />
-//         </section>
-
-//         <DataTable columns={columns} data={appointments.documents} />
-//       </main>
-//     </div>
-//   );
-// };
-
-// export default AdminPage;
-
-// 'use client'
-
-// import { useState } from 'react'
-// import { Moon, Sun, FileText, Menu, X, Plus, Calendar, User, Send } from 'lucide-react'
-// import { Button } from "@/components/ui/button"
-// import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
-// import { Select } from "@/components/ui/select"
-// import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-
-
-// const appointmentsData = [
-//   { patient: 'Phoenix Baker', date: 'Jan 4, 2022', status: 'Scheduled', doctor: 'Dr. Alex Ramirez' },
-//   { patient: 'Candice Wu', date: 'Jan 2, 2022', status: 'Pending', doctor: 'Dr. Michael May' },
-//   { patient: 'Lana Steiner', date: 'Jan 4, 2022', status: 'Cancelled', doctor: 'Dr. Jasmine Lee' },
-//   { patient: 'Drew Cano', date: 'Jan 8, 2022', status: 'Scheduled', doctor: 'Dr. Hardik Sharma' },
-//   { patient: 'Natali Craig', date: 'Jan 6, 2022', status: 'Pending', doctor: 'Dr Aiyana Cruz' },
-// ]
-
-// const statsData = [
-//   { title: 'Total number of scheduled appointments', value: 94, icon: '📅' },
-//   { title: 'Total number of pending appointments', value: 32, icon: '⏳' },
-//   { title: 'Total number of cancelled appointments', value: 56, icon: '❌' },
-// ]
-
-// export default function AdminPage() {
-//   const [isDarkMode, setIsDarkMode] = useState(true)
-//   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-//   const [isNewEmployeeFormOpen, setIsNewEmployeeFormOpen] = useState(false)
-
-//   const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
-//   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
-
-//   const handleSendTemporaryPassword = () => {
-//     // Logic to send temporary password
-//     console.log("Sending temporary password...")
-//   }
-
-//   return (
-//     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
-//       {/* Header */}
-//       <header className="flex justify-between items-center p-4 border-b border-gray-700">
-//         <div className="flex items-center cursor-pointer" onClick={toggleSidebar}>
-//           <img src="/placeholder.svg?height=32&width=32" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
-//           <span className="text-xl font-bold">CarePulse</span>
-//         </div>
-//         <div className="flex items-center">
-//           <img src="/placeholder.svg?height=32&width=32" alt="Admin Avatar" className="w-8 h-8 rounded-full" />
-//           <span className="ml-2">Admin</span>
-//         </div>
-//       </header>
-
-//       {/* Sidebar */}
-//       <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-200 ease-in-out`}>
-//         <div className="flex justify-between items-center p-4 border-b border-gray-700">
-//           <span className="text-xl font-bold">Menu</span>
-//           <Button variant="ghost" size="icon" onClick={toggleSidebar}>
-//             <X className="h-6 w-6" />
-//           </Button>
-//         </div>
-//         <nav className="p-4">
-//           <Button variant="ghost" className="w-full justify-start mb-2" onClick={toggleDarkMode}>
-//             {isDarkMode ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
-//             {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-//           </Button>
-//           <Button variant="ghost" className="w-full justify-start">
-//             <FileText className="mr-2 h-4 w-4" />
-//             Export PDF
-//           </Button>
-//         </nav>
-//       </div>
-
-//       {/* Main Content */}
-//       <main className="p-4">
-//         <div className="flex justify-between items-center mb-6">
-//           <h1 className="text-3xl font-bold">Welcome, Admin</h1>
-//           <Dialog open={isNewEmployeeFormOpen} onOpenChange={setIsNewEmployeeFormOpen}>
-//             <DialogTrigger asChild>
-//               <Button>
-//                 <Plus className="mr-2 h-4 w-4" />
-//                 Add New Employee
-//               </Button>
-//             </DialogTrigger>
-//             <DialogContent className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
-//               <DialogHeader>
-//                 <DialogTitle>Add New Employee</DialogTitle>
-//               </DialogHeader>
-//               <form className="space-y-4">
-//                 <div>
-//                   <Label htmlFor="name">Name</Label>
-//                   <Input id="name" placeholder="Enter employee name" />
-//                 </div>
-//                 <div>
-//                   <Label htmlFor="email">Email</Label>
-//                   <Input id="email" type="email" placeholder="Enter employee email" />
-//                 </div>
-//                 <div>
-//                   <Label htmlFor="role">Role</Label>
-//                   <Select id="role">
-//                     <option value="">Select a role</option>
-//                     <option value="doctor">Doctor</option>
-//                     <option value="nurse">Nurse</option>
-//                     <option value="receptionist">Receptionist</option>
-//                     <option value="admin">Admin</option>
-//                   </Select>
-//                 </div>
-//                 <div>
-//                   <Label htmlFor="startDate">Start Date</Label>
-//                   <Input id="startDate" type="date" />
-//                 </div>
-//                 <div className="flex justify-between">
-//                   <Button type="submit" className="w-1/2 mr-2">Add Employee</Button>
-//                   <Button type="button" variant="outline" className="w-1/2 ml-2" onClick={handleSendTemporaryPassword}>
-//                     <Send className="mr-2 h-4 w-4" />
-//                     Send Temp Password
-//                   </Button>
-//                 </div>
-//               </form>
-//             </DialogContent>
-//           </Dialog>
-//         </div>
-
-//         {/* Stats */}
-//         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-//           {statsData.map((stat, index) => (
-//             <div key={index} className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} transition-colors duration-300 hover:shadow-lg`}>
-//               <div className="text-3xl mb-2">{stat.icon} {stat.value}</div>
-//               <div className="text-sm">{stat.title}</div>
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* Appointments Table */}
-//         <div className={`overflow-x-auto rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} transition-colors duration-300`}>
-//           <table className="w-full">
-//             <thead>
-//               <tr className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
-//                 <th className="p-2 text-left">Patient</th>
-//                 <th className="p-2 text-left">Date</th>
-//                 <th className="p-2 text-left">Status</th>
-//                 <th className="p-2 text-left">Doctor</th>
-//                 <th className="p-2 text-left">Actions</th>
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {appointmentsData.map((appointment, index) => (
-//                 <tr key={index} className={`${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'} transition-colors duration-300`}>
-//                   <td className="p-2">{appointment.patient}</td>
-//                   <td className="p-2">{appointment.date}</td>
-//                   <td className="p-2">
-//                     <span className={`px-2 py-1 rounded-full text-xs ${
-//                       appointment.status === 'Scheduled' ? 'bg-green-500 text-white' :
-//                       appointment.status === 'Pending' ? 'bg-yellow-500 text-black' :
-//                       'bg-red-500 text-white'
-//                     }`}>
-//                       {appointment.status}
-//                     </span>
-//                   </td>
-//                   <td className="p-2">{appointment.doctor}</td>
-//                   <td className="p-2">
-//                     <Button variant="outline" size="sm" className="mr-2">
-//                       <Calendar className="mr-1 h-4 w-4" />
-//                       Schedule
-//                     </Button>
-//                     <Button variant="outline" size="sm">
-//                       <X className="mr-1 h-4 w-4" />
-//                       Cancel
-//                     </Button>
-//                   </td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
-//       </main>
-//     </div>
-//   )
-// }
 
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Moon, Sun, FileText, Menu, X, Plus, Calendar, User, Send, ChevronLeft, ChevronRight, Home, Users, Settings, LogOut, MessageCircle } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -252,38 +9,41 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useRouter } from 'next/navigation'
 import SideBar from '../components/SideBar'
+import { Calendar, X, Send, MessageCircle, ChevronLeft, ChevronRight, Plus, User } from 'lucide-react'
+import { Toaster, toast } from 'react-hot-toast'
+import Image from 'next/image'
+import { Skeleton } from "@/components/ui/skeleton"
 
-const appointmentsData = [
-  { patient: 'Phoenix Baker', date: 'Jan 4, 2022', status: 'Scheduled', doctor: 'Dr. Alex Ramirez' },
-  { patient: 'Candice Wu', date: 'Jan 2, 2022', status: 'Pending', doctor: 'Dr. Michael May' },
-  { patient: 'Lana Steiner', date: 'Jan 4, 2022', status: 'Cancelled', doctor: 'Dr. Jasmine Lee' },
-  { patient: 'Drew Cano', date: 'Jan 8, 2022', status: 'Scheduled', doctor: 'Dr. Hardik Sharma' },
-  { patient: 'Natali Craig', date: 'Jan 6, 2022', status: 'Pending', doctor: 'Dr Aiyana Cruz' },
-  ...Array(20).fill(null).map((_, i) => ({
-    patient: `Patient ${i + 6}`,
-    date: `Jan ${10 + i}, 2022`,
-    status: ['Scheduled', 'Pending', 'Cancelled'][i % 3],
-    doctor: `Dr. Doctor ${i + 6}`
-  }))
-]
+// Define types for user and stats
+type User = {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  imageUrl: string | null;
+  createdAt: string
+};
 
-const statsData = [
-  { title: 'Total number of scheduled appointments', value: 94, icon: '📅' },
-  { title: 'Total number of pending appointments', value: 32, icon: '⏳' },
-  { title: 'Total number of cancelled appointments', value: 56, icon: '❌' },
-]
+type Stat = {
+  title: string;
+  value: number;
+  icon: string;
+};
 
 export default function Employees() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isNewEmployeeFormOpen, setIsNewEmployeeFormOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [users, setUsers] = useState<User[]>([])
   const [isSmallScreen, setIsSmallScreen] = useState(false)
   const [selectedRole, setSelectedRole] = useState("")
-
+  const [isEditEmployeeFormOpen, setIsEditEmployeeFormOpen] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const itemsPerPage = 10
-  const totalPages = Math.ceil(appointmentsData.length / itemsPerPage)
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
     const handleResize = () => {
@@ -295,20 +55,162 @@ export default function Employees() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setIsLoading(true)
+      setError(null)
+      try {
+        const response = await fetch('http://localhost:4000/api/users')
+        if (!response.ok) {
+          throw new Error('Failed to fetch users')
+        }
+        const data = await response.json()
+        if (Array.isArray(data)) {
+          setUsers(data)
+          toast.success('Users fetched successfully')
+        } else {
+          throw new Error('Received invalid data format')
+        }
+      } catch (error) {
+        console.error("Failed to fetch users:", error)
+        setError('Failed to fetch users. Please try again later.')
+        toast.error('Failed to fetch users')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchUsers()
+  }, [])
+
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
-  const handleSendTemporaryPassword = () => {
-    console.log("Sending temporary password...")
+  const handleSendTemporaryPassword = (id: string) => {
+    toast.promise(
+      fetch(`http://localhost:4000/api/admin/reset/${id}`, { method: 'POST' }),
+      {
+        loading: 'Sending temporary password...',
+        success: 'Temporary password sent successfully',
+        error: 'Failed to send temporary password',
+      }
+    )
   }
 
-  const paginatedAppointments = appointmentsData.slice(
+  const handleUpdateUser = async (id: string) => {
+    try {
+      const response = await fetch(`http://localhost:4000/api/users/${id}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch user details')
+      }
+      const user = await response.json()
+      setSelectedUser(user)
+      setSelectedRole(user.role)
+      setIsEditEmployeeFormOpen(true)
+      toast.success('User details fetched for editing')
+    } catch (error) {
+      console.error("Failed to fetch user:", error)
+      toast.error('Failed to fetch user details')
+    }
+  }
+
+  const handleSaveUser = async () => {
+    if (selectedUser) {
+      toast.promise(
+        fetch(`http://localhost:4000/api/users/${selectedUser._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...selectedUser, role: selectedRole }),
+        }).then(res => {
+          if (!res.ok) throw new Error('Failed to update user')
+          setUsers(prevUsers => prevUsers.map(user => user._id === selectedUser._id ? { ...selectedUser, role: selectedRole } : user))
+          setIsEditEmployeeFormOpen(false)
+        }),
+        {
+          loading: 'Updating user...',
+          success: 'User updated successfully',
+          error: 'Failed to update user',
+        }
+      )
+    }
+  }
+
+  const handleDeleteUser = (id: string) => {
+    toast.promise(
+      fetch(`http://localhost:4000/api/users/${id}`, { method: 'DELETE' })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to delete user')
+          setUsers(prevUsers => prevUsers.filter(user => user._id !== id))
+        }),
+      {
+        loading: 'Deleting user...',
+        success: 'User deleted successfully',
+        error: 'Failed to delete user',
+      }
+    )
+  }
+
+  const handleAddEmployee = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const newEmployee = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      role: selectedRole,
+      startDate: formData.get('startDate') as string,
+    }
+
+    toast.promise(
+      fetch('http://localhost:4000/api/admin/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newEmployee),
+      }).then(res => {
+        if (!res.ok) throw new Error('Failed to add employee')
+        return res.json()
+      }).then(data => {
+        setUsers(prevUsers => [...prevUsers, data])
+        setIsNewEmployeeFormOpen(false)
+      }),
+      {
+        loading: 'Adding new employee...',
+        success: 'New employee added successfully. A password reset email has been sent.',
+        error: 'Failed to add new employee',
+      }
+    )
+  }
+
+  const paginatedUsers = users.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   )
 
+  const totalPages = Math.ceil(users.length / itemsPerPage)
+
+  const LoadingSkeleton = () => (
+    <>
+      {[...Array(itemsPerPage)].map((_, index) => (
+        <tr key={index} className={`${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <td className="p-2"><Skeleton className="h-10 w-10 rounded-full" /></td>
+          <td className="p-2"><Skeleton className="h-4 w-[150px]" /></td>
+          <td className="p-2"><Skeleton className="h-4 w-[200px]" /></td>
+          <td className="p-2"><Skeleton className="h-4 w-[100px]" /></td>
+          <td className="p-2">
+            <Skeleton className="h-8 w-[100px] mr-2 inline-block" />
+            <Skeleton className="h-8 w-[100px] inline-block" />
+          </td>
+          <td className="p-2"><Skeleton className="h-8 w-[80px]" /></td>
+        </tr>
+      ))}
+    </>
+  )
+
   return (
     <div className={`flex flex-col ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
+      <Toaster position="top-right" />
       {/* Header */}
       <header className="flex justify-between items-center p-4 border-b border-gray-700 h-16">
         <div className="flex items-center cursor-pointer" onClick={toggleSidebar}>
@@ -329,15 +231,15 @@ export default function Employees() {
           isSmallScreen={isSmallScreen} 
           toggleSidebar={toggleSidebar} 
           toggleDarkMode={toggleDarkMode}
-          appointmentData={appointmentsData}
-          statsData={statsData}
+          data={users}
+          statsData={[]}
         />
         {/* Main Content */}
-        <main className={`flex-grow px-4 sm:px-6 lg:px-8 ${isSidebarOpen ? '' : ''}`}>
+        <main className={`flex-grow px-4 sm:px-6 lg:px-8`}>
           <div className="h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-3xl font-bold">Welcome, Admin</h1>
-              <Dialog open={isNewEmployeeFormOpen} onOpenChange={setIsNewEmployeeFormOpen}>
+              <Dialog open={isNewEmployeeFormOpen} onOpenChange={setIsNewEmployeeFormOpen} className='pt-5'>
                 <DialogTrigger asChild>
                   <Button>
                     <Plus className="mr-2 h-4 w-4" />
@@ -348,18 +250,18 @@ export default function Employees() {
                   <DialogHeader>
                     <DialogTitle>Add New Employee</DialogTitle>
                   </DialogHeader>
-                  <form className="space-y-4">
+                  <form onSubmit={handleAddEmployee} className="space-y-4">
                     <div>
                       <Label htmlFor="name">Name</Label>
-                      <Input id="name" placeholder="Enter employee name" />
+                      <Input id="name" name="name" placeholder="Enter employee name" required />
                     </div>
                     <div>
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="Enter employee email" />
+                      <Input id="email" name="email" type="email" placeholder="Enter employee email" required />
                     </div>
                     <div>
                       <Label htmlFor="role">Role</Label>
-                      <Select value={selectedRole} onValueChange={setSelectedRole}>
+                      <Select value={selectedRole} onValueChange={setSelectedRole} required>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a role" />
                         </SelectTrigger>
@@ -371,13 +273,9 @@ export default function Employees() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <div>
-                      <Label htmlFor="startDate">Start Date</Label>
-                      <Input id="startDate" type="date" />
-                    </div>
                     <div className="flex justify-between">
                       <Button type="submit" className="w-1/2 mr-2">Add Employee</Button>
-                      <Button type="button" variant="outline" className="w-1/2 ml-2" onClick={handleSendTemporaryPassword}>
+                      <Button type="button" variant="outline" className="w-1/2 ml-2" onClick={() => handleSendTemporaryPassword(selectedUser?._id || '')}>
                         <Send className="mr-2 h-4 w-4" />
                         Send Temp Password
                       </Button>
@@ -387,68 +285,72 @@ export default function Employees() {
               </Dialog>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              {statsData.map((stat, index) => (
-                <div key={index} className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} transition-colors duration-300 hover:shadow-lg`}>
-                  <div className="text-3xl mb-2">{stat.icon} {stat.value}</div>
-                  <div className="text-sm">{stat.title}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className={`overflow-x-auto rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} transition-colors duration-300`}>
-              <table className="w-full">
-                <thead>
-                  <tr className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
-                    <th className="p-2 text-left">Patient</th>
-                    <th className="p-2 text-left">Date</th>
-                    <th className="p-2 text-left">Status</th>
-                    <th className="p-2 text-left">Doctor</th>
-                    <th className="p-2 text-left">Actions</th>
-                    <th className="p-2 text-left">OTP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedAppointments.map((appointment, index) => (
-                    <tr key={index} className={`${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'} transition-colors duration-300`}>
-                      <td className="p-2">{appointment.patient}</td>
-                      <td className="p-2">{appointment.date}</td>
-                      <td className="p-2">
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          appointment.status === 'Scheduled' ? 'bg-green-500 text-white' :
-                          appointment.status === 'Pending' ? 'bg-yellow-500 text-black' :
-                          'bg-red-500 text-white'
-                        }`}>
-                          {appointment.status}
-                        </span>
-                      </td>
-                      <td className="p-2">{appointment.doctor}</td>
-                      <td className="p-2">
-                        <Button variant="outline" size="sm" className="mr-2">
-                          <Calendar className="mr-1 h-4 w-4" />
-                          Schedule
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <X className="mr-1 h-4 w-4" />
-                          Cancel
-                        </Button>
-                      </td>
-                      <td className="p-2">
-                        <Button variant="outline" size="sm">
-                          <MessageCircle className="mr-1 h-4 w-4" />
-                          OTP
-                        </Button>
-                      </td>
+            {error ? (
+              <div className="text-red-500 text-center py-4">{error}</div>
+            ) : (
+              <div className={`overflow-x-auto rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'} transition-colors duration-300`}>
+                <table className="w-full">
+                  <thead>
+                    <tr className={`${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                      <th className="p-2 text-left">Image</th>
+                      <th className="p-2 text-left">Name</th>
+                      <th className="p-2 text-left">Email</th>
+                      <th className="p-2 text-left">Role</th>
+                      <th className="p-2 text-left">Actions</th>
+                      <th className="p-2 text-left">OTP</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {isLoading ? (
+                      <LoadingSkeleton />
+                    ) : (
+                      paginatedUsers.map(user => (
+                        <tr key={user._id} className={`${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'} transition-colors duration-300`}>
+                          <td className="p-2">
+                            {user.imageUrl ? (
+                              <Image
+                                src={user.imageUrl}
+                                alt={`${user.name}'s profile`}
+                                width={40}
+                                height={40}
+                                className="rounded-full"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+                                <User className="w-6 h-6 text-gray-600" />
+                              </div>
+                            )}
+                          </td>
+                          <td className="p-2">{user.name}</td>
+                          <td className="p-2">{user.email}</td>
+                          <td className="p-2">{user.role}</td>
+                          <td className="p-2">
+                            <Button variant="outline" size="sm" className={`mr-2 ${isDarkMode ? 'bg-gray-700' : 'hover:bg-gray-200'} transition-colors duration-300`} 
+                              onClick={() => handleUpdateUser(user._id)}>
+                              Update
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => handleDeleteUser(user._id)}>
+                              Delete
+                            </Button>
+                          </td>
+                          <td className="p-2">
+                            <Button variant="outline" size="sm" onClick={() => handleSendTemporaryPassword(user._id)}>
+                              <MessageCircle className="mr-1 h-4 w-4" />
+                              OTP
+                            </Button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
             <div className="flex justify-between items-center mt-4">
               <Button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
+                disabled={currentPage === 1 || isLoading}
               >
                 <ChevronLeft className="mr-2 h-4 w-4" />
                 Previous
@@ -456,7 +358,7 @@ export default function Employees() {
               <span>Page {currentPage} of {totalPages}</span>
               <Button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
+                disabled={currentPage === totalPages || isLoading}
               >
                 Next
                 <ChevronRight className="ml-2 h-4 w-4" />
@@ -464,6 +366,42 @@ export default function Employees() {
             </div>
           </div>
         </main> 
+
+         {/* Dialog for Editing Employee */}
+         <Dialog open={isEditEmployeeFormOpen} onOpenChange={setIsEditEmployeeFormOpen}>
+          <DialogContent className={`${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+            <DialogHeader>
+              <DialogTitle>Edit Employee</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Label>Name</Label>
+              <Input
+                value={selectedUser?.name || ''}
+                onChange={e => setSelectedUser(prev => prev ? { ...prev, name: e.target.value } : null)}
+              />
+              <Label>Email</Label>
+              <Input
+                type="email"
+                value={selectedUser?.email || ''}
+                onChange={e => setSelectedUser(prev => prev ? { ...prev, email: e.target.value } : null)}
+              />
+              <Label>Role</Label>
+              <Select value={selectedRole} onValueChange={setSelectedRole}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="staff">User</SelectItem>
+                  <SelectItem value="doctor">Doctor</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="mt-4 flex justify-end">
+              <Button onClick={handleSaveUser}>Save</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   )

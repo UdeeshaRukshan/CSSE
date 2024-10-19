@@ -64,11 +64,11 @@ export default function Dashboard() {
       <header className={`flex justify-between items-center p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-300'} h-16`}>
         <div className="flex items-center cursor-pointer" onClick={toggleSidebar}>
           <img src="/placeholder.svg?height=32&width=32" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
-          <span className="text-xl font-bold">CarePulse</span>
+
         </div>
         <div className="flex items-center">
-          <img src="/placeholder.svg?height=32&width=32" alt="Admin Avatar" className="w-8 h-8 rounded-full" />
-          <span className="ml-2">Admin</span>
+          <img src="https://miro.medium.com/v2/resize:fit:2400/1*9xbYBxTlBK-8ks-kvixqRA.jpeg" alt="Admin Avatar" className="w-8 h-8 rounded-full" />
+          <span className="ml-2">Udeesha Rukshan</span>
         </div>
       </header>
 
