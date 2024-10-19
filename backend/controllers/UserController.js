@@ -1,219 +1,354 @@
-const User = require('../models/UserModel'); // Adjust the path as necessary
+const User = require('../backend/models/UserModel');
 const bcrypt = require('bcryptjs');
-const loggerService = require('../util/LoggerService'); // Import existing logger
-const { sendNotificationEmail } = require('../util/AppointmentNotifications'); // Import email notification utility
+const userController = require('../backend/controllers/UserController');
+const loggerService = require('../backend/util/LoggerService');
+const { sendNotificationEmail } = require('../backend/util/AppointmentNotifications');
 const jwt = require('jsonwebtoken');
+jest.mock('../backend/models/UserModel');
+jest.mock('bcryptjs');
+jest.mock('../backend/util/LoggerService');
+jest.mock('../backend/util/AppointmentNotifications');
+jest.mock('jsonwebtoken');
 
-const secretKey = process.env.JWT_SECRET_KEY || 'yourSecretKey';
+describe('User Controller', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
 
-// Create a new user
-const createUser = async (req, res) => {
-  try {
-      // Hash password before saving user
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      const user = new User({ ...req.body, password: hashedPassword });
-      
-      // Save the user to the database
-      await user.save();
-      loggerService.info(`User created successfully: ${user._id}`);
+    // Test createUser
+    describe('createUser', () => {
+        it('should create a new user and send welcome email', async () => {
+            const req = {
+                body: {
+                    name: 'John Doe',
+                    email: 'john@example.com',
+                    password: 'password123',
+                },
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+                cookie: jest.fn(),
+            };
 
-      // Send welcome email
-      await sendNotificationEmail({
-          patientEmail: user.email,
-          subject: 'Welcome!',
-          message: `Thank you for registering, ${user.name}!`,
-      });
+            bcrypt.hash.mockResolvedValue('hashedPassword');
+            User.mockImplementation(() => ({
+                save: jest.fn().mockResolvedValue({ _id: 'user123' }),
+            }));
+            sendNotificationEmail.mockResolvedValue();
+            jwt.sign.mockReturnValue('jwtToken');
 
-      // Generate JWT token
-      const secretKey = process.env.JWT_SECRET_KEY||'yourSecretKey'; // Use environment variable for security
-      if (!secretKey) {
-        throw new Error('JWT secret key is missing');
-      }
+            await userController.createUser(req, res);
 
-      const authToken = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
-      
-      // Set cookie with the JWT token
-      res.cookie('authToken', authToken, {
-          httpOnly: true, // Prevent access from client-side scripts
-          secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-          maxAge: 3600000, // 1 hour
-          sameSite: 'Strict', // Prevent cross-site request forgery
-      });
+            expect(bcrypt.hash).toHaveBeenCalledWith(req.body.password, 10);
+            expect(User).toHaveBeenCalledWith({ ...req.body, password: 'hashedPassword' });
+            expect(res.cookie).toHaveBeenCalledWith('authToken', 'jwtToken', expect.any(Object));
+            expect(res.status).toHaveBeenCalledWith(201);
+            expect(res.json).toHaveBeenCalledWith({ message: 'User created successfully', user: { _id: 'user123' } });
+            expect(loggerService.info).toHaveBeenCalledWith(`User created successfully: user123`);
+            expect(sendNotificationEmail).toHaveBeenCalledWith({
+                patientEmail: req.body.email,
+                subject: 'Welcome!',
+                message: `Thank you for registering, ${req.body.name}!`,
+            });
+        });
 
-      // Respond with success and user data
-      return res.status(201).json({ message: 'User created successfully', user });
-  } catch (error) {
-      loggerService.error(`Error creating user: ${error.message}`);
-      return res.status(500).json({ message: 'Error creating user', error: error.message });
-  }
-};
+        it('should return 500 if there is an error', async () => {
+            const req = {
+                body: {
+                    name: 'John Doe',
+                    email: 'john@example.com',
+                    password: 'password123',
+                },
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
 
+            bcrypt.hash.mockRejectedValue(new Error('Hashing error'));
 
-// Login a user
-const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+            await userController.createUser(req, res);
 
-  try {
-      // Check if user exists
-      const user = await User.findOne({ email });
-      if (!user) {
-          loggerService.warn(`Invalid login attempt for email: ${email}`);
-          return res.status(400).json({ message: 'Invalid credentials' });
-      }
+            expect(loggerService.error).toHaveBeenCalledWith(`Error creating user: Hashing error`);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Error creating user', error: 'Hashing error' });
+        });
+    });
 
-      // Compare passwords using bcrypt
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-          loggerService.warn(`Invalid password attempt for user: ${user._id}`);
-          return res.status(400).json({ message: 'Invalid credentials' });
-      }
+    // Test loginUser
+    describe('loginUser', () => {
+        it('should login the user and return a token', async () => {
+            const req = {
+                body: {
+                    email: 'john@example.com',
+                    password: 'password123',
+                },
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+                cookie: jest.fn(),
+            };
 
-      // Generate auth token (JWT)
-      const authToken = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
+            const userMock = { _id: 'user123', password: 'hashedPassword' };
+            User.findOne.mockResolvedValue(userMock);
+            bcrypt.compare.mockResolvedValue(true);
+            jwt.sign.mockReturnValue('jwtToken');
 
-      // Set auth token as a cookie
-      res.cookie('authToken', authToken, {
-          httpOnly: true,
-          maxAge: 3600000, // 1 hour
-          secure: false,  // Set to true if using HTTPS
-          sameSite: 'strict',
-      });
+            await userController.loginUser(req, res);
 
-      loggerService.info(`User logged in: ${user._id}`);
-      return res.status(200).json({ message: 'Login successful', userId: user._id });
-  } catch (error) {
-      loggerService.error(`Error logging in: ${error.message}`);
-      return res.status(500).json({ message: 'Server error' });
-  }
-};
+            expect(User.findOne).toHaveBeenCalledWith({ email: req.body.email });
+            expect(bcrypt.compare).toHaveBeenCalledWith(req.body.password, userMock.password);
+            expect(res.cookie).toHaveBeenCalledWith('authToken', 'jwtToken', expect.any(Object));
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Login successful', userId: userMock._id });
+            expect(loggerService.info).toHaveBeenCalledWith(`User logged in: ${userMock._id}`);
+        });
 
-// Signup Controller
-const signupUser = async (req, res) => {
-  const { name, email, phone, password } = req.body;
+        it('should return 400 if user not found', async () => {
+            const req = { body: { email: 'wrong@example.com', password: 'password123' } };
+            const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
-  try {
-      // Check if the user already exists
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-          return res.status(400).json({ message: 'User already exists with this email' });
-      }
+            User.findOne.mockResolvedValue(null);
 
-      // Hash the password before saving
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new User({
-          name,
-          email,
-          phone,
-          password: hashedPassword,
-      });
+            await userController.loginUser(req, res);
 
-      // Save the new user to the database
-      const savedUser = await newUser.save();
-      loggerService.info(`User registered successfully: ${savedUser._id}`);
+            expect(loggerService.warn).toHaveBeenCalledWith(`Invalid login attempt for email: ${req.body.email}`);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Invalid credentials' });
+        });
 
-      // Set auth token as a cookie
-      const authToken = jwt.sign({ userId: savedUser._id }, secretKey, { expiresIn: '1h' });
-      res.cookie('authToken', authToken, {
-          httpOnly: true,
-          maxAge: 3600000, // 1 hour
-      });
+        it('should return 400 if password is incorrect', async () => {
+            const req = {
+                body: {
+                    email: 'john@example.com',
+                    password: 'wrongPassword',
+                },
+            };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
 
-      // Send welcome email
-      await sendNotificationEmail({
-          patientEmail: savedUser.email,
-          subject: 'Welcome!',
-          message: `Thank you for registering, ${savedUser.name}!`,
-      });
+            const userMock = { _id: 'user123', password: 'hashedPassword' };
+            User.findOne.mockResolvedValue(userMock);
+            bcrypt.compare.mockResolvedValue(false);
 
-      // Send a success response
-      return res.status(201).json({
-          message: 'User registered successfully',
-          userId: savedUser._id,
-      });
-  } catch (error) {
-      loggerService.error(`Error during user registration: ${error.message}`);
-      return res.status(500).json({ message: 'Server error' });
-  }
-};
+            await userController.loginUser(req, res);
 
+            expect(loggerService.warn).toHaveBeenCalledWith(`Invalid password attempt for user: ${userMock._id}`);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Invalid credentials' });
+        });
 
-// Get all users
-const getAllUsers = async (req, res) => {
-    try {
-        const users = await User.find();
-        loggerService.info(`Fetched ${users.length} users successfully.`);
-        return res.status(200).json(users);
-    } catch (error) {
-        loggerService.error(`Error fetching users: ${error.message}`);
-        return res.status(500).json({ message: 'Error fetching users' });
-    }
-};
+        it('should return 500 if there is an error', async () => {
+            const req = { body: { email: 'john@example.com', password: 'password123' } };
+            const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
-// Get a user by ID
-const getUserById = async (req, res) => {
-    const { id } = req.params;
+            User.findOne.mockRejectedValue(new Error('Database error'));
 
-    try {
-        const user = await User.findById(id);
-        if (!user) {
-            loggerService.warn(`User not found for ID: ${id}`);
-            return res.status(404).json({ message: 'User not found' });
-        }
+            await userController.loginUser(req, res);
 
-        loggerService.info(`Fetched user: ${user._id}`);
-        return res.status(200).json(user);
-    } catch (error) {
-        loggerService.error(`Error fetching user by ID: ${error.message}`);
-        return res.status(500).json({ message: 'Error fetching user' });
-    }
-};
+            expect(loggerService.error).toHaveBeenCalledWith(`Error logging in: Database error`);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Server error' });
+        });
+    });
 
-// Update a user by ID
-const updateUser = async (req, res) => {
-    const { id } = req.params;
+    // Test getAllUsers
+    describe('getAllUsers', () => {
+        it('should return all users', async () => {
+            const req = {};
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
 
-    try {
-        const user = await User.findByIdAndUpdate(id, req.body, { new: true });
-        if (!user) {
-            loggerService.warn(`User not found for update: ${id}`);
-            return res.status(404).json({ message: 'User not found' });
-        }
+            const usersMock = [{ _id: 'user1' }, { _id: 'user2' }];
+            User.find.mockResolvedValue(usersMock);
 
-        loggerService.info(`User updated successfully: ${user._id}`);
-        return res.status(200).json({ message: 'User updated successfully', user });
-    } catch (error) {
-        loggerService.error(`Error updating user: ${error.message}`);
-        return res.status(400).json({ message: error.message });
-    }
-};
+            await userController.getAllUsers(req, res);
 
+            expect(User.find).toHaveBeenCalled();
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(usersMock);
+            expect(loggerService.info).toHaveBeenCalledWith(`Fetched ${usersMock.length} users successfully.`);
+        });
 
-// Delete a user by ID
-const deleteUser = async (req, res) => {
-    const { id } = req.params;
+        it('should return 500 if there is an error', async () => {
+            const req = {};
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
 
-    try {
-        const user = await User.findByIdAndDelete(id);
-        if (!user) {
-            loggerService.warn(`User not found for deletion: ${id}`);
-            return res.status(404).json({ message: 'User not found' });
-        }
+            User.find.mockRejectedValue(new Error('Database error'));
 
-        loggerService.info(`User deleted successfully: ${user._id}`);
-        return res.status(200).json({ message: 'User deleted successfully' });
-    } catch (error) {
-        loggerService.error(`Error deleting user: ${error.message}`);
-        return res.status(500).json({ message: error.message });
-    }
-};
+            await userController.getAllUsers(req, res);
 
-// Export the functions using CommonJS
-module.exports = {
-    createUser,
-    signupUser,
-    getAllUsers,
-    getUserById,
-    updateUser,
-    deleteUser,
-    loginUser,
-};
+            expect(loggerService.error).toHaveBeenCalledWith(`Error fetching users: Database error`);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Error fetching users' });
+        });
+    });
+
+    // Test getUserById
+    describe('getUserById', () => {
+        it('should return a user by ID', async () => {
+            const req = { params: { id: 'user123' } };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+
+            const userMock = { _id: 'user123', name: 'John Doe' };
+            User.findById.mockResolvedValue(userMock);
+
+            await userController.getUserById(req, res);
+
+            expect(User.findById).toHaveBeenCalledWith('user123');
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(userMock);
+            expect(loggerService.info).toHaveBeenCalledWith(`Fetched user: ${userMock._id}`);
+        });
+
+        it('should return 404 if user not found', async () => {
+            const req = { params: { id: 'nonexistentId' } };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+
+            User.findById.mockResolvedValue(null);
+
+            await userController.getUserById(req, res);
+
+            expect(loggerService.warn).toHaveBeenCalledWith(`User not found for ID: nonexistentId`);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({ message: 'User not found' });
+        });
+
+        it('should return 500 if there is an error', async () => {
+            const req = { params: { id: 'user123' } };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+
+            User.findById.mockRejectedValue(new Error('Database error'));
+
+            await userController.getUserById(req, res);
+
+            expect(loggerService.error).toHaveBeenCalledWith(`Error fetching user by ID: Database error`);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Error fetching user' });
+        });
+    });
+
+    // Test updateUser
+    describe('updateUser', () => {
+        it('should update a user by ID', async () => {
+            const req = { params: { id: 'user123' }, body: { name: 'Jane Doe' } };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+
+            const userMock = { _id: 'user123', name: 'Jane Doe' };
+            User.findByIdAndUpdate.mockResolvedValue(userMock);
+
+            await userController.updateUser(req, res);
+
+            expect(User.findByIdAndUpdate).toHaveBeenCalledWith(req.params.id, req.body, { new: true });
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({ message: 'User updated successfully', user: userMock });
+            expect(loggerService.info).toHaveBeenCalledWith(`User updated successfully: ${userMock._id}`);
+        });
+
+        it('should return 404 if user not found for update', async () => {
+            const req = { params: { id: 'nonexistentId' }, body: { name: 'Jane Doe' } };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+
+            User.findByIdAndUpdate.mockResolvedValue(null);
+
+            await userController.updateUser(req, res);
+
+            expect(loggerService.warn).toHaveBeenCalledWith(`User not found for update: nonexistentId`);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({ message: 'User not found' });
+        });
+
+        it('should return 400 if there is a validation error', async () => {
+            const req = { params: { id: 'user123' }, body: { name: 'Jane Doe' } };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+
+            User.findByIdAndUpdate.mockRejectedValue(new Error('Validation error'));
+
+            await userController.updateUser(req, res);
+
+            expect(loggerService.error).toHaveBeenCalledWith(`Error updating user: Validation error`);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Validation error' });
+        });
+    });
+
+    // Test deleteUser
+    describe('deleteUser', () => {
+        it('should delete a user by ID', async () => {
+            const req = { params: { id: 'user123' } };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+
+            const userMock = { _id: 'user123' };
+            User.findByIdAndDelete.mockResolvedValue(userMock);
+
+            await userController.deleteUser(req, res);
+
+            expect(User.findByIdAndDelete).toHaveBeenCalledWith('user123');
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({ message: 'User deleted successfully' });
+            expect(loggerService.info).toHaveBeenCalledWith(`User deleted successfully: ${userMock._id}`);
+        });
+
+        it('should return 404 if user not found for deletion', async () => {
+            const req = { params: { id: 'nonexistentId' } };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+
+            User.findByIdAndDelete.mockResolvedValue(null);
+
+            await userController.deleteUser(req, res);
+
+            expect(loggerService.warn).toHaveBeenCalledWith(`User not found for deletion: nonexistentId`);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({ message: 'User not found' });
+        });
+
+        it('should return 500 if there is an error', async () => {
+            const req = { params: { id: 'user123' } };
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn(),
+            };
+
+            User.findByIdAndDelete.mockRejectedValue(new Error('Database error'));
+
+            await userController.deleteUser(req, res);
+
+            expect(loggerService.error).toHaveBeenCalledWith(`Error deleting user: Database error`);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ message: 'Database error' });
+        });
+    });
+});

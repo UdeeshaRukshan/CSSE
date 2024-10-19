@@ -27,7 +27,7 @@ const Home = ({ searchParams }: SearchParamProps) => {
       </section>
 
       <Image
-        src="/assets/images/onboarding-img.png"
+        src="https://png.pngtree.com/png-clipart/20230927/original/pngtree-photo-men-doctor-physician-chest-smiling-png-image_13143575.png"
         height={1000}
         width={1000}
         alt="patient"
