@@ -46,8 +46,7 @@ const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, isDarkMode, isSmallScr
   
 
   return (
-    <aside className={`${isSidebarOpen ? 'block' : 'hidden'} lg:block fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-200 ease-in-out ${isSmallScreen && !isSidebarOpen ? '-translate-x-full' : 'translate-x-0'} h-[calc(100vh-4rem)] flex flex-col`}>
-      <div className="flex justify-between items-center p-4 border-b border-gray-700">
+<aside className={`${isSidebarOpen ? 'block' : 'hidden'} lg:block fixed lg:static inset-y-0 left-0 z-50 w-64 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} transform transition-transform duration-200 ease-in-out ${isSmallScreen && !isSidebarOpen ? '-translate-x-full' : 'translate-x-0'} h-[calc(100vh-4rem)] flex flex-col`}>      <div className="flex justify-between items-center p-4 border-b border-gray-700">
         <span className="text-xl font-bold">Menu</span>
         {isSmallScreen && (
           <Button variant="ghost" size="icon" onClick={toggleSidebar}>
@@ -69,6 +68,10 @@ const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, isDarkMode, isSmallScr
             <Users className="mr-2 h-4 w-4" />
             Patients
           </Button>
+          <Button variant="ghost" className="w-full justify-start mb-2" onClick={() => router.push('/login/admin/appointments/')}>
+            <User className="mr-2 h-4 w-4" />
+            Appointments
+          </Button>
           <Button variant="ghost" className="w-full justify-start mb-2" onClick={() => router.push('/login/admin/doctors/')}>
             <User className="mr-2 h-4 w-4" />
             Doctors
@@ -89,7 +92,7 @@ const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, isDarkMode, isSmallScr
           Export PDF
         </Button>
       </div>
-      <div className="p-4 border-t border-gray-700 mt-36">
+      <div className="p-4 border-t border-gray-700 mt-32">
         <div className="flex items-center mb-2">
           <img src={userData.img} alt="User Avatar" className="w-10 h-10 rounded-full mr-3" />
           <div>
