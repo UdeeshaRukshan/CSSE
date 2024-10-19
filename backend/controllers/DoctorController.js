@@ -371,6 +371,21 @@ const createAppointment = async (req, res) => {
       return res.status(500).json({ message: 'Error retrieving patient details' });
     }
   };
+  // Function to get a doctor by email
+  const getDoctorByEmail = async (req, res) => {
+    const email = req.params.email; // Assuming the email is passed as a URL parameter, e.g., /api/doctor/:email
+  
+    try {
+      const doctor = await Doctor.findOne({ email });
+      if (!doctor) {
+        return res.status(404).json({ message: 'Doctor not found', success: false });
+      }
+      return res.status(200).json({ doctor, success: true });
+    } catch (error) {
+      console.error('Error fetching doctor by email:', error);
+      return res.status(500).json({ message: 'Error fetching doctor', success: false, error });
+    }
+  };
   
 module.exports = {
     registerUser,
@@ -384,4 +399,5 @@ module.exports = {
     createPatient,
     createAppointment,
     getPatientById,
+    getDoctorByEmail,
 }

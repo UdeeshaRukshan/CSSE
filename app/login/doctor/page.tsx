@@ -142,11 +142,15 @@
 //     </div>
 //   )
 // }
+
 'use client';
 import React, { useState, useEffect } from 'react'
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
+import Cookies from 'js-cookie';
+import PatientFacade from './Facade/PatientFacade'
+
 
 
 
@@ -161,38 +165,69 @@ export default function DoctorDashboard() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [doctorId, setDoctorId] = useState<string | null>(null);
   const router = useRouter();
+  
 
-  const handlePatientClick = (patientId: string) => {
+  const handlePatientClick = (patientId: string,appointmentId: string) => {
+    Cookies.set('appointmentId', appointmentId, { expires: 1 });
     router.push(`/login/doctor/PatientProfile/${patientId}`);
   };
 
+  useEffect(() => {
+    const fetchDoctorId = async () => {
+      const userEmail = Cookies.get('userEmail');
+      if (!userEmail) {
+        setError('User email not found. Please log in again.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:4000/api/doctor/getdoctorbyemail/${userEmail}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch doctor ID');
+        }
+        const data = await response.json();
+        console.log(data.doctor._id);
+        setDoctorId(data.doctor._id);
+        
+      } catch (error) {
+        console.error('Error fetching doctor ID:', error);
+        setError('Failed to load doctor information. Please try again later.');
+      }
+    };
+
+    fetchDoctorId();
+  }, []);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch('http://localhost:4000/api/doctorappointment/doctor/6712903d40cc48e7c37d2f4f/today-appointments')
-      .then(response => {
+    if (!doctorId) return; // Only run if doctorId is set
+
+    const fetchAppointments = async () => {
+      setIsLoading(true);
+      try {
+        const response = await PatientFacade.getTodaysAppointments(doctorId);
         if (!response.ok) {
           throw new Error('Failed to fetch appointments');
         }
-        return response.json();
-      })
-      .then(data => {
+        const data = await response.json();
         const filteredAppointments = data.data.map((appointment: any) => ({
           id: appointment._id,
           patient: appointment.patient.userId,
           date: appointment.appointmentDate,
           time: appointment.time
         }));
-        setAppointments(filteredAppointments);
-        setIsLoading(false);
-      })
-      .catch(error => {
+        setAppointments(filteredAppointments); // Set the appointments state
+      } catch (error) {
         console.error('Error fetching appointments:', error);
         setError('Failed to load appointments. Please try again later.');
-        setIsLoading(false);
-      });
-  }, []);
+      } finally {
+        setIsLoading(false); // Stop loading once the request completes
+      }
+    };
+
+    fetchAppointments();
+  }, [doctorId]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -283,7 +318,7 @@ export default function DoctorDashboard() {
                       <tr key={appointment.id} className={index % 2 === 0 ? 'bg-white' : ''}>
                         <td className="py-2 text-black">
                           <div className="flex items-center">
-                            <button onClick={() => handlePatientClick(appointment.patient)}
+                            <button onClick={() => handlePatientClick(appointment.patient,appointment.id)}
                             
                               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold mr-2 ${
                                 ['bg-green-200', 'bg-blue-200', 'bg-purple-200', 'bg-yellow-200', 'bg-red-200'][index % 5]

@@ -40,6 +40,7 @@ export default function LoginScreen() {
         
         // Save userId and authToken as cookies
         Cookies.set('userId', data.userId, { expires: 1 });
+         Cookies.set('userEmail', formData.email, { expires: 1 });
         Cookies.set('authToken', data.authToken, { expires: 1 });
 
         router.push('/login/doctor');
