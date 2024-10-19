@@ -102,7 +102,7 @@ export default function Dashboard() {
         <div className={`flex-1 overflow-auto p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
             {/* Trends Card */}
-            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} dark:bg-slate-50`}>
+            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} light:bg-slate-50`}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Trends</CardTitle>
                 <Select defaultValue="month">
@@ -132,7 +132,7 @@ export default function Dashboard() {
             </Card>
 
             {/* Sales Trends Card */}
-            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} dark:bg-slate-50`}>
+            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} light:bg-slate-50`}>
               <CardHeader>
                 <CardTitle className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Sales Trends</CardTitle>
               </CardHeader>
@@ -162,7 +162,7 @@ export default function Dashboard() {
           {/* Product Sales and Earnings Categories */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Product Sales Card */}
-            <Card className={`col-span-2 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} dark:bg-slate-50`}>
+            <Card className={`col-span-2 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} light:bg-slate-50`}>
               <CardHeader>
                 <CardTitle className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Product Sales</CardTitle>
               </CardHeader>
@@ -196,7 +196,7 @@ export default function Dashboard() {
             </Card>
 
             {/* Earnings Categories Card */}
-            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} dark:bg-slate-50`}>
+            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} light:bg-slate-50`}>
               <CardHeader>
                 <CardTitle className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Earnings Categories</CardTitle>
               </CardHeader>
