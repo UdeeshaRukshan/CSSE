@@ -25,10 +25,16 @@ const StaffLoginPage = () => {
             });
 
             const data = await response.json();
+            console.log(data);
 
             if (response.ok) {
+                sessionStorage.setItem('user', JSON.stringify({
+                    ...data.staff,
+                    isLoggedIn: true
+                }));
+                
                 console.log('Login successful:', data);
-                router.push(`/login/staff/dashboard`);
+                router.push('/login/staff/dashboard');
             } else {
                 console.error('Login failed:', data.message);
                 setError(data.message);

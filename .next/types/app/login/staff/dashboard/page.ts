@@ -1,4 +1,4 @@
-// File: C:\Users\STZ\OneDrive\Documents\Projects\CSSE\app\login\staff\dashboard\page.jsx
+// File: /Users/nikleshfernando/Desktop/SLIIT_UNI/CSSE/CSSE/app/login/staff/dashboard/page.jsx
 import * as entry from '../../../../../../app/login/staff/dashboard/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

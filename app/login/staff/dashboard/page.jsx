@@ -39,6 +39,7 @@ import {
 import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
+  const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isNewEmployeeFormOpen, setIsNewEmployeeFormOpen] = useState(false);
@@ -58,6 +59,9 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [doctorCount, setDoctorCount] = useState(0);
+  const [staffUsername, setStaffUsername] = useState("");
+  const [staffFullname, setStaffFullname] = useState("");
+  const [staffEmail, setStaffEmail] = useState("");
 
   const fetchDoctors = async () => {
     setIsLoading(true);
@@ -91,6 +95,18 @@ export default function Dashboard() {
   useEffect(() => {
     fetchDoctors();
   }, []);
+
+  useEffect(() => {
+    const staffDataSession = sessionStorage.getItem("user");
+    console.log("Staff Data", staffDataSession);
+    if (staffDataSession) {
+      const jsonStaffData = JSON.parse(staffDataSession);
+      setStaffUsername(jsonStaffData.username);
+      setStaffFullname(jsonStaffData.fullName);
+      setStaffEmail(jsonStaffData.email);
+      console.log(staffUsername);
+    }
+  });
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -182,7 +198,7 @@ export default function Dashboard() {
             alt="CarePulse Logo"
             className="w-8 h-8 mr-2"
           />
-          <span className="text-xl font-bold">CarePulse</span>
+          <span className="text-xl font-bold">SmartMed</span>
         </div>
         <div className="flex items-center">
           <img
@@ -190,7 +206,7 @@ export default function Dashboard() {
             alt="Admin Avatar"
             className="w-8 h-8 rounded-full"
           />
-          <span className="ml-2">Staff Manager</span>
+          <span className="ml-2">{}</span>
         </div>
       </header>
 
@@ -265,13 +281,14 @@ export default function Dashboard() {
                 className="w-10 h-10 rounded-full mr-3"
               />
               <div>
-                <div className="font-semibold">John Doe</div>
-                <div className="text-sm text-gray-400">john@example.com</div>
+                <div className="font-semibold">{staffUsername}</div>
+                <div className="text-sm text-gray-400">{staffEmail}</div>
               </div>
             </div>
             <Button
               variant="ghost"
               className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900"
+              onClick={() => router.push("/login/staff/login")}
             >
               <LogOut className="mr-2 h-4 w-4" />
               Logout
@@ -285,7 +302,7 @@ export default function Dashboard() {
         >
           <div className="h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold">Welcome, Staff Manager</h1>
+              <h1 className="text-3xl font-bold">Welcome, {staffFullname}</h1>
               <Dialog
                 open={isNewEmployeeFormOpen}
                 onOpenChange={setIsNewEmployeeFormOpen}
