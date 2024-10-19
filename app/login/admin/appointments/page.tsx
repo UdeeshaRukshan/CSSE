@@ -246,7 +246,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Moon, Sun, FileText, Menu, X, Plus, Calendar, User, Send, ChevronLeft, ChevronRight, Search, Eye, Trash2 } from 'lucide-react'
+import { Moon, Sun, FileText, Menu, X, Plus, Calendar, User, Send, ChevronLeft, ChevronRight, Search, Eye, Trash2, Download } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -259,6 +259,9 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation'
 import { useGlobalContext } from '@/lib/GlobalProvider'
 import Link from 'next/link'
+import { saveAs } from 'file-saver'; // To trigger the file download
+import PDFDocument from './PDFDocument'
+import { pdf } from '@react-pdf/renderer'
 
 interface Appointment {
   _id: string
@@ -379,6 +382,31 @@ export default function Appointments() {
     currentPage * itemsPerPage
   )
 
+  const generateAndDownloadPDF = async () => {
+    const stats = {
+      totalAppointments: appointments.length,
+      appointmentsThisMonth: appointments.filter(appointment => {
+        const appointmentDate = new Date(appointment.schedule)
+        const currentDate = new Date()
+        return appointmentDate.getMonth() === currentDate.getMonth() &&
+               appointmentDate.getFullYear() === currentDate.getFullYear()
+      }).length,
+      mostAppointedDoctor: getMostAppointedDoctor(appointments),
+    }
+
+    const blob = await pdf(<PDFDocument data={appointments} stats={stats} />).toBlob()
+    saveAs(blob, 'appointments_report.pdf')
+  }
+
+  const getMostAppointedDoctor = (appointments: Appointment[]) => {
+    const doctorCounts = appointments.reduce((acc, appointment) => {
+      acc[appointment.doctor] = (acc[appointment.doctor] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+
+    return Object.entries(doctorCounts).reduce((a, b) => a[1] > b[1] ? a : b)[0]
+  }
+  
   return (
     // <div className={`flex flex-col h-screen transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
     <div className={`flex flex-col ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
@@ -414,7 +442,7 @@ export default function Appointments() {
             <h1 className="text-3xl font-bold my-6">Appointments</h1>
 
             {/* Search Input */}
-            <div className={`max-w-sm  mb-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>
+            {/* <div className={`max-w-sm  mb-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} flex-row`}>
               <Input
                 type="text"
                 placeholder="Search appointments..."
@@ -423,8 +451,42 @@ export default function Appointments() {
                 className={`max-w-sm ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}
                 icon={<Search className="h-4 w-4" />}
               />
+                          <div>
+            <Button onClick={generateAndDownloadPDF} className={`${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors duration-300`}>
+                <Download className="mr-2 h-4 w-4" />
+                Export to PDF
+              </Button>
             </div>
+            </div> */}
 
+{/* Search Input and Export Button Container */}
+<div className={`max-w-full mb-4 flex justify-between items-center ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+  
+  {/* Search Input */}
+  <div className="flex-grow max-w-sm">
+    <Input
+      type="text"
+      placeholder="Search appointments..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className={`w-full ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}
+      icon={<Search className="h-4 w-4" />}
+    />
+  </div>
+
+  {/* Export to PDF Button */}
+  <Button 
+    onClick={generateAndDownloadPDF} 
+    className={`ml-4 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors duration-300`}
+  >
+    <Download className="mr-2 h-4 w-4" />
+    Export to PDF
+  </Button>
+</div>
+
+            {/* Export to PDF Button */}
+
+            
             {/* Appointments Table */}
             {isLoading ? (
               <div className="flex justify-center items-center h-64">

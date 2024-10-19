@@ -20,17 +20,17 @@ const monthlyData = [
 ]
 
 const salesTrendsData = [
-  { name: 'Appointments', trend: 2.0 },
+  { name: 'Appointments', trend: 8.0 },
   { name: 'Pharmacy', trend: -2.0 },
-  { name: 'ophthalmologists', trend: -2.0 },
-  { name: 'Canteen', trend: 2.0 },
+  { name: 'ophthalmologists', trend: 3.0 },
+  { name: 'Canteen', trend: 10.0 },
 ]
 
 const productSalesData = [
-  { name: 'Appointments', sold: 123, trend: 2.0 },
-  { name: 'Pharmacy', sold: 123, trend: -2.0 },
-  { name: 'ophthalmologists', sold: 123, trend: -2.0 },
-  { name: 'Canteen', sold: 123, trend: 2.0 },
+  { name: 'Appointments', sold: 1425, trend: 8.0 },
+  { name: 'Pharmacy', sold: 55000, trend: -2.0 },
+  { name: 'ophthalmologists', sold: 123, trend: 3.0 },
+  { name: 'Canteen', sold: 2850, trend: 10.0 },
 ]
 
 const earningsCategoriesData = [
