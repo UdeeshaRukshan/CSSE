@@ -87,7 +87,7 @@ const loginUser = async (req, res) => {
 
 // Signup Controller
 const signupUser = async (req, res) => {
-  const { name, email, phone, password } = req.body;
+  const { name, email, phone, password, role } = req.body;
 
   try {
       // Check if the user already exists
@@ -103,6 +103,7 @@ const signupUser = async (req, res) => {
           email,
           phone,
           password: hashedPassword,
+          role
       });
 
       // Save the new user to the database

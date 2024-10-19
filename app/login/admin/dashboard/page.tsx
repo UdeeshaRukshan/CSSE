@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import SideBar from '../components/SideBar'
+import Cookies from 'js-cookie';
 
 const monthlyData = [
   { month: 'Jan', value1: 70, value2: 90 },
@@ -18,24 +19,24 @@ const monthlyData = [
 ]
 
 const salesTrendsData = [
-  { name: 'Web Design Template', trend: 2.0 },
-  { name: 'App Template', trend: -2.0 },
-  { name: 'Dashboard Template', trend: -2.0 },
-  { name: 'Icons Set', trend: 2.0 },
+  { name: 'Appointments', trend: 2.0 },
+  { name: 'Pharmacy', trend: -2.0 },
+  { name: 'ophthalmologists', trend: -2.0 },
+  { name: 'Canteen', trend: 2.0 },
 ]
 
 const productSalesData = [
-  { name: 'Web Template', sold: 123, trend: 2.0 },
-  { name: 'Icons Set', sold: 123, trend: -2.0 },
-  { name: 'App Template', sold: 123, trend: -2.0 },
-  { name: 'Dashboard Template', sold: 123, trend: 2.0 },
+  { name: 'Appointments', sold: 123, trend: 2.0 },
+  { name: 'Pharmacy', sold: 123, trend: -2.0 },
+  { name: 'ophthalmologists', sold: 123, trend: -2.0 },
+  { name: 'Canteen', sold: 123, trend: 2.0 },
 ]
 
 const earningsCategoriesData = [
-  { name: 'Web Template', value: 1763, percentage: 35 },
-  { name: 'Icons Set', value: 321, percentage: 25 },
-  { name: 'App Template', value: 669, percentage: 25 },
-  { name: 'Dashboard Template', value: 154, percentage: 15 },
+  { name: 'Appointments', value: 1763, percentage: 35 },
+  { name: 'Pharmacy', value: 321, percentage: 25 },
+  { name: 'ophthalmologists', value: 669, percentage: 25 },
+  { name: 'Canteen', value: 154, percentage: 15 },
 ]
 
 const COLORS = ['#8b5cf6', '#f472b6', '#60a5fa', '#fbbf24']
@@ -44,6 +45,20 @@ export default function Dashboard() {
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isSmallScreen, setIsSmallScreen] = useState(false)
+
+  const [userData, setUserData] = useState({ name: '', email: '', img:'' });
+
+  useEffect(() => {
+    const userId = Cookies.get('userId');
+    if (userId) {
+      fetch(`http://localhost:4000/api/users/${userId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setUserData({ name: data.name, email: data.email, img: data.img });
+        })
+        .catch((error) => console.error('Error fetching user data:', error));
+    }
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -87,7 +102,7 @@ export default function Dashboard() {
         <div className={`flex-1 overflow-auto p-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
             {/* Trends Card */}
-            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} light:bg-slate-50`}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Trends</CardTitle>
                 <Select defaultValue="month">
@@ -117,7 +132,7 @@ export default function Dashboard() {
             </Card>
 
             {/* Sales Trends Card */}
-            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} light:bg-slate-50`}>
               <CardHeader>
                 <CardTitle className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Sales Trends</CardTitle>
               </CardHeader>
@@ -147,7 +162,7 @@ export default function Dashboard() {
           {/* Product Sales and Earnings Categories */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Product Sales Card */}
-            <Card className={`col-span-2 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <Card className={`col-span-2 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} light:bg-slate-50`}>
               <CardHeader>
                 <CardTitle className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Product Sales</CardTitle>
               </CardHeader>
@@ -181,7 +196,7 @@ export default function Dashboard() {
             </Card>
 
             {/* Earnings Categories Card */}
-            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <Card className={`col-span-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} light:bg-slate-50`}>
               <CardHeader>
                 <CardTitle className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Earnings Categories</CardTitle>
               </CardHeader>
