@@ -6,6 +6,7 @@ const adminRoutes = require('./routes/AdminRoutes');
 const patientRoutes = require('./routes/PatientRoutes'); 
 const userRoutes = require('./routes/UserRoutes'); 
 const appointmentRoutes = require('./routes/AppointmentRoutes');
+const transactionRoutes = require('./routes/TransactionRoutes');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -29,6 +30,7 @@ db.connect().then(() => {
   app.use('/api/patients', patientRoutes); 
   app.use('/api/users', userRoutes); 
   app.use('/api/appointment', appointmentRoutes);
+  app.use('/api/transaction', transactionRoutes)
 
   // Start the server
   app.listen(PORT, () => {

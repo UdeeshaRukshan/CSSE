@@ -3,6 +3,8 @@ const AppointmentFactory = require('../controllers/factory/AppointmentFactory');
 const loggerService = require('../util/LoggerService');
 const appointmentObserver = require('../controllers/observers/AppointmentObserver');
 const { sendNotificationEmail } = require('../util/AppointmentNotifications');
+const Transaction = require('../models/TransactionModel');
+const { v4: uuidv4 } = require('uuid');
 
 // Function to send appointment notifications
 const notifyAppointment = (type, data) => {
@@ -33,35 +35,59 @@ appointmentObserver.subscribe((data) => {
 });
 
 const createAppointment = async (req, res) => {
-    const { userId, patientId, doctor, schedule, reason, status, note, patientEmail } = req.body;
+  const { userId, patientId, doctor, schedule, reason, status, note, patientEmail, transactionType, amount } = req.body;
 
-    try {
-        const newAppointment = AppointmentFactory.createAppointment({
-            userId,
-            patientId,
-            doctor,
-            schedule,
-            reason,
-            status,
-            note,
-        });
+  const session = await Appointment.startSession();
+  session.startTransaction();
 
-        const savedAppointment = await newAppointment.save();
-        loggerService.info(`Appointment created successfully: ${savedAppointment._id}`);
+  try {
+      const newAppointment = AppointmentFactory.createAppointment({
+          userId,
+          patientId,
+          doctor,
+          schedule,
+          reason,
+          status,
+          note,
+      });
 
-        // Notify about appointment creation
-        appointmentObserver.notify({
-            type: 'creation', // Indicate the type of notification
-            patientEmail,     // Ensure patientEmail is included in the data
-            doctor,
-            schedule,
-        });
+      const savedAppointment = await newAppointment.save({ session });
 
-        return res.status(201).json(savedAppointment);
-    } catch (error) {
-        loggerService.error(`Error creating appointment: ${error.message}`);
-        return res.status(500).json({ message: 'Error creating appointment' });
-    }
+      // Create a transaction linked to the appointment
+      const newTransaction = new Transaction({
+          transactionId: uuidv4(),
+          type: transactionType,
+          transactionStatus: 'pending', // Assuming it starts as pending
+          amount: amount,
+          appointment: savedAppointment._id,
+      });
+
+      const savedTransaction = await newTransaction.save({ session });
+
+      // Add transaction to the appointment
+      savedAppointment.transactions.push(savedTransaction._id);
+      await savedAppointment.save({ session });
+
+      await session.commitTransaction();
+      session.endSession();
+
+      loggerService.info(`Appointment created successfully: ${savedAppointment._id}, with Transaction: ${savedTransaction.transactionId}`);
+
+      // Notify about appointment creation
+      appointmentObserver.notify({
+          type: 'creation', 
+          patientEmail,     
+          doctor,
+          schedule,
+      });
+
+      return res.status(201).json(savedAppointment);
+  } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      loggerService.error(`Error creating appointment: ${error.message}`);
+      return res.status(500).json({ message: 'Error creating appointment' });
+  }
 };
 
 // Fetch all appointments
