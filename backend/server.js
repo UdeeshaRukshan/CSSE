@@ -7,7 +7,6 @@ const staffRoutes = require('./routes/StaffRoutes');
 const userRoutes = require('./routes/UserRoutes'); 
 const doctorRoutes = require('./routes/DoctorRoutes'); 
 const appointmentRoutes = require('./routes/AppointmentRoutes');
-const otherStaff = require('./routes/OtherStaffRoutes');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -29,7 +28,6 @@ db.connect().then(() => {
   app.use('/api/appointment', appointmentRoutes);
   app.use('/api/staff', staffRoutes);
   app.use('/api/doctor',doctorRoutes);
-  app.use('/api/otherStaff',otherStaff);
 
 
   app.listen(PORT, () => {
