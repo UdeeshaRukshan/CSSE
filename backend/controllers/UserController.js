@@ -205,30 +205,31 @@ const deleteUser = async (req, res) => {
 };
 
 // Get user role by ID
-exports.getRoleByUserId = async (req, res) => {
+const getRoleByUserId = async (req, res) => {
   try {
       // Find the user by ID
       const user = await User.findById(req.params.id);
-      
       // Check if user exists
       if (!user) {
           return res.status(404).json({ message: 'User  not found' });
       }
-
       // Send the user's role in the response
       res.status(200).json({ role: user.role });
   } catch (error) {
       console.error('Error retrieving user role:', error);
       res.status(500).json({ message: 'Server error' });
   }
+}
 
 // Export the functions using CommonJS
 module.exports = {
-    createUser,
-    signupUser,
-    getAllUsers,
-    getUserById,
-    updateUser,
-    deleteUser,
-    loginUser,
+  createUser,
+  signupUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+  loginUser,
+  getRoleByUserId, // Add this line
 };
+
