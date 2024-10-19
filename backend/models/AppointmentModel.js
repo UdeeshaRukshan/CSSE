@@ -31,6 +31,10 @@ const AppointmentSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  transactions: [{
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Transaction',
+  }] ,
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
 
 const Appointment = mongoose.model('Appointment', AppointmentSchema);
