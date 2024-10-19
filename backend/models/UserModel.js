@@ -13,5 +13,5 @@ const userSchema = new Schema({
   timestamps: true // This option adds createdAt and updatedAt fields
 });
 
-const User = model('User ', userSchema);
-module.exports = User;
+const User = model('User', userSchema);
+module.exports=User;

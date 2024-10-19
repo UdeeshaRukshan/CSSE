@@ -42,7 +42,7 @@ const RequestSuccess = ({ searchParams, params: { userId } }: SearchParamProps) 
     if (appointmentId) {
       fetchAppointment();
     } else {
-      setLoading(false); // No appointmentId provided, skip fetching
+      setLoading(false); 
     }
   }, [appointmentId]);
 
@@ -53,7 +53,7 @@ const RequestSuccess = ({ searchParams, params: { userId } }: SearchParamProps) 
 
   // Function to handle navigation
   const handleNavigate = () => {
-    router.push('/login/patients/login/dashbord'); // Ensure the route is correct
+    router.push('/login/patients/login/table'); 
   };
 
   return (
