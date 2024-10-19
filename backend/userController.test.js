@@ -16,7 +16,7 @@ describe('User Controller', () => {
             const req = {
                 body: {
                     username: 'john_doe',
-                    email: 'johne@example.com',
+                    email: 'johne12@example.com',
                     password: 'password123',
                 },
             };
