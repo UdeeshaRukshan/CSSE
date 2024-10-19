@@ -1,9 +1,8 @@
+'use client';
 import React from 'react'
 import { Moon, Sun, FileText, X, Home, Calendar, Users, User, Settings, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation';
-
-import { PDFDownloadLink } from '@react-pdf/renderer';
 
 interface SideBarProps {
   isSidebarOpen: boolean;
@@ -17,7 +16,9 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, isDarkMode, isSmallScreen, toggleSidebar, toggleDarkMode, appointmentData}) => {
   const router = useRouter()
-
+  const handleNavigateToLogin = () => {
+    router.push('/login')
+  }
   return (
     <aside className={`${isSidebarOpen ? 'block' : 'hidden'} lg:block fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gray-800 transform transition-transform duration-200 ease-in-out ${isSmallScreen && !isSidebarOpen ? '-translate-x-full' : 'translate-x-0'} h-[calc(100vh-4rem)] flex flex-col`}>
       <div className="flex justify-between items-center p-4 border-b border-gray-700">
@@ -38,6 +39,10 @@ const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, isDarkMode, isSmallScr
             <Calendar className="mr-2 h-4 w-4" />
             Patients
           </Button>
+          <Button variant="ghost" className="w-full justify-start mb-2" onClick={() => router.push('/login/patients/login/patient/history')}>
+            <Calendar className="mr-2 h-4 w-4" />
+            Appointments History
+          </Button>
           
         </div>
       </nav>
@@ -50,13 +55,13 @@ const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, isDarkMode, isSmallScr
       </div>
       <div className="p-4 border-t border-gray-700 mt-36">
         <div className="flex items-center mb-2">
-          <img src="/placeholder.svg?height=40&width=40" alt="User Avatar" className="w-10 h-10 rounded-full mr-3" />
+          <img src="https://miro.medium.com/v2/resize:fit:2400/1*9xbYBxTlBK-8ks-kvixqRA.jpeg" alt="User Avatar" className="w-10 h-10 rounded-full mr-3" />
           <div>
-            <div className="font-semibold">John Doe</div>
-            <div className="text-sm text-gray-400">john@example.com</div>
+            <div className="font-semibold">Udeesha Rukshan</div>
+            
           </div>
         </div>
-        <Button variant="ghost" className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900">
+        <Button onClick={()=>handleNavigateToLogin} variant="ghost" className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900">
           <LogOut className="mr-2 h-4 w-4" />
           Logout
         </Button>

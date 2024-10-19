@@ -1,10 +1,8 @@
 const User = require('../backend/models/UserModel');
-const UserFactory = require('../backend/controllers/factory/UserFactory');
 const userController = require('../backend/controllers/UserController');
 const loggerService = require('../backend/util/LoggerService');
 
 jest.mock('../backend/models/UserModel');
-jest.mock('../backend/controllers/factory/UserFactory');
 jest.mock('../backend/util/LoggerService');
 
 describe('User Controller', () => {
@@ -18,7 +16,7 @@ describe('User Controller', () => {
             const req = {
                 body: {
                     username: 'john_doe',
-                    email: 'john@example.com',
+                    email: 'johne@example.com',
                     password: 'password123',
                 },
             };
@@ -30,12 +28,13 @@ describe('User Controller', () => {
             const userMock = {
                 save: jest.fn().mockResolvedValue({ _id: 'user123' }),
             };
-            UserFactory.createUser.mockReturnValue(userMock);
+
+            // Mock the User model to return the userMock when save is called
+            User.prototype.save = jest.fn().mockResolvedValue(userMock);
 
             await userController.createUser(req, res);
 
-            expect(UserFactory.createUser).toHaveBeenCalledWith(req.body);
-            expect(userMock.save).toHaveBeenCalled();
+            expect(User.prototype.save).toHaveBeenCalled();
             expect(loggerService.info).toHaveBeenCalledWith('User created successfully: user123');
             expect(res.status).toHaveBeenCalledWith(201);
             expect(res.json).toHaveBeenCalledWith({ _id: 'user123' });
@@ -50,7 +49,7 @@ describe('User Controller', () => {
                 json: jest.fn(),
             };
 
-            UserFactory.createUser.mockImplementation(() => {
+            User.prototype.save.mockImplementation(() => {
                 throw new Error('Test Error');
             });
 
@@ -73,7 +72,7 @@ describe('User Controller', () => {
 
             User.find.mockResolvedValue([{ _id: 'user1' }, { _id: 'user2' }]);
 
-            await userController.getUsers(req, res);
+            await userController.getAllUsers(req, res);
 
             expect(User.find).toHaveBeenCalled();
             expect(loggerService.info).toHaveBeenCalledWith('Fetched all users successfully.');
@@ -90,7 +89,7 @@ describe('User Controller', () => {
 
             User.find.mockRejectedValue(new Error('Test Error'));
 
-            await userController.getUsers(req, res);
+            await userController.getAllUsers(req, res);
 
             expect(loggerService.error).toHaveBeenCalledWith('Error fetching users: Test Error');
             expect(res.status).toHaveBeenCalledWith(500);

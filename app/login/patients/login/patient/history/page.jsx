@@ -2,13 +2,13 @@
 import React from 'react';
 import { jsPDF } from 'jspdf';
 import { useState, useEffect } from "react";
-import { Plus, Send } from "lucide-react";
+import { Plus} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { saveAs } from "file-saver";
-import SideBar from "../table/SideBar";
+import SideBar from "../../table/SideBar";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -150,7 +150,7 @@ export default function Employees() {
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/appointment/user/${userId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/appointment`
         );
         const appointmentsData = response.data;
         setAppointments(appointmentsData);
