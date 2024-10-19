@@ -1,9 +1,9 @@
 const Staff = require("../models/StaffModel");
 const mongoose = require("mongoose");
 
-const registerStaff = async(req,res)=>{
-    try{
-        const{
+const registerStaff = async (req, res) => {
+    try {
+        const {
             staffId,
             username,
             fullName,
@@ -30,14 +30,14 @@ const registerStaff = async(req,res)=>{
             staff: savedStaff,
         });
 
-    }catch(error){
+    } catch (error) {
         console.error('Error registering Staff Member:', error);
         res.status(500).json({
             message: 'Error registering Staff Member',
             error: error.message,
         });
     }
-}
+};
 
 const findStaffByUsername = async (req, res) => {
     const { username } = req.params;
@@ -61,4 +61,45 @@ const findStaffByUsername = async (req, res) => {
     }
 };
 
-module.exports = { findStaffByUsername };
+const loginStaff = async (req, res) => {
+    const { username, password } = req.params; // Use req.body instead of req.params
+
+    try {
+        // Find the staff member by username
+        const staff = await Staff.findOne({ username });
+
+        // Check if staff member exists
+        if (!staff) {
+            return res.status(404).json({ message: 'Staff not found' });
+        }
+
+        // Compare the entered password with the stored password
+        if (staff.password !== password) {
+            return res.status(401).json({ message: 'Invalid password' });
+        }
+
+        // If password is valid, return success message and staff info
+        res.status(200).json({
+            message: 'Login successful',
+            staff: {
+                staffId: staff.staffId,
+                username: staff.username,
+                fullName: staff.fullName,
+                email: staff.email,
+                position: staff.position,
+                contact: staff.contact
+            }
+        });
+    } catch (error) {
+        console.error('Error logging in staff:', error);
+        res.status(500).json({ message: 'Error logging in staff', error: error.message });
+    }
+};
+
+
+module.exports = {
+    registerStaff,
+    findStaffByUsername,
+    loginStaff
+};
+

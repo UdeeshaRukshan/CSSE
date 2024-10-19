@@ -16,8 +16,6 @@ class Database {
       this.connection = await mongoose.connect(process.env.MONGO_URL, {
         useNewUrlParser: true,        // Parses MongoDB connection string correctly
         useUnifiedTopology: true,     // Uses the new connection management engine
-        useCreateIndex: true,         // Ensures indexes are created properly
-        useFindAndModify: false       // Disables deprecated MongoDB `findAndModify`
       });
       console.log('MongoDB connected successfully');
       return this.connection;
