@@ -1,4 +1,4 @@
-const DoctorAppointment = require('../models/DoctorAppointment'); // Importing the DoctorAppointment model
+const DoctorAppointment = require('../models/DoctorAppointmentModel') // Importing the DoctorAppointment model
 const Prescription = require('../models/Prescription');
 const Diagnosis = require('../models/Diagnosis');
 
@@ -9,7 +9,7 @@ const getPatientMedicalHistory = async (req, res) => {
 
     // Find all appointments for the given patient and populate doctor, prescription, and diagnosis
     const medicalHistory = await DoctorAppointment.find({ patient: patientId })
-      .populate('doctor', 'name') // Populate doctor details (name)
+      .populate('doctor','fullName') // Populate doctor details (name)
       .populate('prescription')   // Populate prescription details
       .populate('diagnosis')      // Populate diagnosis details
       .exec();                    // Execute the query
@@ -144,7 +144,8 @@ const getAppointmentsByDoctor = async (req, res) => {
 const getTodayAppointmentsForDoctor = async (req, res) => {
     try {
       // Assuming the doctor's ID is available in req.user._id after login
-      const doctorId = req.user._id;
+      //const doctorId = req.user._id;
+      const {doctorId} = req.params;
   
       // Get the start and end of today
       const startOfToday = new Date();
@@ -182,7 +183,7 @@ const getTodayAppointmentsForDoctor = async (req, res) => {
 const getUpcomingAppointmentsForDoctor = async (req, res) => {
     try {
       // Assuming the doctor's ID is available in req.user._id after login
-      const doctorId = req.user._id;
+      const {doctorId} = req.params;
   
       // Get the start of tomorrow
       const today = new Date();

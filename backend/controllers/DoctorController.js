@@ -354,6 +354,23 @@ const createAppointment = async (req, res) => {
       res.status(500).json({ message: 'Server error, could not create appointment' });
     }
   };
+
+  const getPatientById = async (req, res) => {
+    const {userId}  = req.params; // Extract userId from route params
+  
+    try {
+      const patient = await Patient.findOne(userId );
+  
+      if (!patient) {
+        return res.status(404).json({ message: 'Patient not found' });
+      }
+  
+      return res.status(200).json(patient); // Return the patient data
+    } catch (error) {
+      console.error('Error fetching patient details:', error);
+      return res.status(500).json({ message: 'Error retrieving patient details' });
+    }
+  };
   
 module.exports = {
     registerUser,
@@ -366,4 +383,5 @@ module.exports = {
     createDiagnosis,
     createPatient,
     createAppointment,
+    getPatientById,
 }

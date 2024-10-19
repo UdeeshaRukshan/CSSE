@@ -6,6 +6,7 @@ const patientRoutes = require('./routes/PatientRoutes');
 const userRoutes = require('./routes/UserRoutes'); 
 const appointmentRoutes = require('./routes/AppointmentRoutes');
 const doctorRoutes = require('./routes/UserDoctorRoutes');
+const doctorAppointment = require('./routes/DoctorRoutes')
 const app = express();
 const PORT = process.env.PORT || 4000;
 const session = require('express-session');
@@ -41,6 +42,7 @@ db.connect().then(() => {
   app.use('/api/patients', patientRoutes); 
   app.use('/api/users', userRoutes); 
   app.use('/api/appointment', appointmentRoutes);
+  app.use('/api/doctorappointment',doctorAppointment);
   
   //app.use('/api/doctor',)
   app.get('/', (req, res) => {
