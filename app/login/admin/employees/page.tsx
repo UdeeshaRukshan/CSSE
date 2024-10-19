@@ -423,6 +423,7 @@ import { Toaster, toast } from 'react-hot-toast'
 import Image from 'next/image'
 import { Skeleton } from "@/components/ui/skeleton"
 import Cookies from 'js-cookie';
+import { useGlobalContext } from '@/lib/GlobalProvider'
 
 // Define types for user and stats
 type User = {
@@ -441,7 +442,7 @@ type Stat = {
 };
 
 export default function Employees() {
-  const [isDarkMode, setIsDarkMode] = useState(true)
+  // const [isDarkMode, setIsDarkMode] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isNewEmployeeFormOpen, setIsNewEmployeeFormOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -457,20 +458,22 @@ export default function Employees() {
   const [filterRole, setFilterRole] = useState("all") // Updated: Set initial filterRole to "all"
   const itemsPerPage = 10
   const router = useRouter()
+  const { isDarkMode, toggleDarkMode, userData } = useGlobalContext()
 
-  const [userData, setUserData] = useState({ name: '', email: '', img:'' });
 
-  useEffect(() => {
-    const userId = Cookies.get('userId');
-    if (userId) {
-      fetch(`http://localhost:4000/api/users/${userId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setUserData({ name: data.name, email: data.email, img: data.img });
-        })
-        .catch((error) => console.error('Error fetching user data:', error));
-    }
-  }, []);
+  // const [userData, setUserData] = useState({ name: '', email: '', img:'' });
+
+  // useEffect(() => {
+  //   const userId = Cookies.get('userId');
+  //   if (userId) {
+  //     fetch(`http://localhost:4000/api/users/${userId}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setUserData({ name: data.name, email: data.email, img: data.img });
+  //       })
+  //       .catch((error) => console.error('Error fetching user data:', error));
+  //   }
+  // }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -521,7 +524,7 @@ export default function Employees() {
     setCurrentPage(1)
   }, [searchTerm, filterRole, users])
 
-  const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
+  // const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
   const handleSendTemporaryPassword = (id: string) => {
@@ -653,11 +656,11 @@ export default function Employees() {
       {/* Header */}
       <header className="flex justify-between items-center p-4 border-b border-gray-700 h-16">
         <div className="flex items-center cursor-pointer" onClick={toggleSidebar}>
-          <img src="/placeholder.svg?height=32&width=32" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
+          <img src="/assets/images/image.png"alt="CarePulse Logo" className="w-8 h-8 mr-2" />
           <span className="text-xl font-bold">CarePulse</span>
         </div>
         <div className="flex items-center">
-          <img src={userData.img} alt="Admin Avatar" className="w-8 h-8 rounded-full" />
+          <img src="/assets/images/admin.png" alt="Admin Avatar" className="w-8 h-8 rounded-full" />
           <span className="ml-2">{userData.name}</span>
         </div>
       </header>

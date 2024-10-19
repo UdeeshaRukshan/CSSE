@@ -72,14 +72,6 @@ const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, isDarkMode, isSmallScr
             <User className="mr-2 h-4 w-4" />
             Appointments
           </Button>
-          <Button variant="ghost" className="w-full justify-start mb-2" onClick={() => router.push('/login/admin/doctors/')}>
-            <User className="mr-2 h-4 w-4" />
-            Doctors
-          </Button>
-          <Button variant="ghost" className="w-full justify-start mb-2">
-            <Settings className="mr-2 h-4 w-4" />
-            Settings
-          </Button>
         </div>
       </nav>
       <div className="p-4 border-t border-gray-700">
@@ -92,9 +84,9 @@ const SideBar: React.FC<SideBarProps> = ({ isSidebarOpen, isDarkMode, isSmallScr
           Export PDF
         </Button>
       </div>
-      <div className="p-4 border-t border-gray-700 mt-32">
+      <div className="p-4 border-t border-gray-700 mt-36">
         <div className="flex items-center mb-2">
-          <img src={userData.img} alt="User Avatar" className="w-10 h-10 rounded-full mr-3" />
+          <img src="/assets/images/admin.png" alt="User Avatar" className="w-10 h-10 rounded-full mr-3" />
           <div>
             <div className="font-semibold">{userData.name}</div>
             <div className="text-sm text-gray-400">{userData.email}</div>

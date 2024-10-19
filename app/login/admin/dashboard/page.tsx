@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import SideBar from '../components/SideBar'
 import Cookies from 'js-cookie';
+import { useGlobalContext } from '@/lib/GlobalProvider'
 
 const monthlyData = [
   { month: 'Jan', value1: 70, value2: 90 },
@@ -42,23 +43,25 @@ const earningsCategoriesData = [
 const COLORS = ['#8b5cf6', '#f472b6', '#60a5fa', '#fbbf24']
 
 export default function Dashboard() {
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  // const [isDarkMode, setIsDarkMode] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isSmallScreen, setIsSmallScreen] = useState(false)
 
-  const [userData, setUserData] = useState({ name: '', email: '', img:'' });
+  const { isDarkMode, toggleDarkMode, userData } = useGlobalContext()
 
-  useEffect(() => {
-    const userId = Cookies.get('userId');
-    if (userId) {
-      fetch(`http://localhost:4000/api/users/${userId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setUserData({ name: data.name, email: data.email, img: data.img });
-        })
-        .catch((error) => console.error('Error fetching user data:', error));
-    }
-  }, []);
+  // const [userData, setUserData] = useState({ name: '', email: '', img:'' });
+
+  // useEffect(() => {
+  //   const userId = Cookies.get('userId');
+  //   if (userId) {
+  //     fetch(`http://localhost:4000/api/users/${userId}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setUserData({ name: data.name, email: data.email, img: data.img });
+  //       })
+  //       .catch((error) => console.error('Error fetching user data:', error));
+  //   }
+  // }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,7 +73,7 @@ export default function Dashboard() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
+  // const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
   return (
@@ -78,12 +81,12 @@ export default function Dashboard() {
       {/* Header */}
       <header className={`flex justify-between items-center p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-300'} h-16`}>
         <div className="flex items-center cursor-pointer" onClick={toggleSidebar}>
-          <img src="/placeholder.svg?height=32&width=32" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
+          <img src="/assets/images/image.png" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
           <span className="text-xl font-bold">CarePulse</span>
         </div>
         <div className="flex items-center">
-          <img src="/placeholder.svg?height=32&width=32" alt="Admin Avatar" className="w-8 h-8 rounded-full" />
-          <span className="ml-2">Admin</span>
+          <img src="/assets/images/admin.png" alt="Admin Avatar" className="w-8 h-8 rounded-full" />
+          <span className="ml-2">{userData.name}</span>
         </div>
       </header>
 

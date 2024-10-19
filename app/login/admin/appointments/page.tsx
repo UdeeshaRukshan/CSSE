@@ -256,6 +256,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Loader2 } from 'lucide-react'
 import SideBar from '../components/SideBar'
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation'
+import { useGlobalContext } from '@/lib/GlobalProvider'
+import Link from 'next/link'
 
 interface Appointment {
   _id: string
@@ -277,7 +280,7 @@ interface Transaction {
 }
 
 export default function Appointments() {
-  const [isDarkMode, setIsDarkMode] = useState(true)
+  // const [isDarkMode, setIsDarkMode] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [filteredAppointments, setFilteredAppointments] = useState<Appointment[]>([])
@@ -290,20 +293,22 @@ export default function Appointments() {
 
   const itemsPerPage = 10
   const totalPages = Math.ceil(filteredAppointments.length / itemsPerPage)
+  const { isDarkMode, toggleDarkMode, userData } = useGlobalContext()
 
-  const [userData, setUserData] = useState({ name: '', email: '', img:'' });
+  // const [userData, setUserData] = useState({ name: '', email: '', img:'' });
+  const router = useRouter();
 
-  useEffect(() => {
-    const userId = Cookies.get('userId');
-    if (userId) {
-      fetch(`http://localhost:4000/api/users/${userId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setUserData({ name: data.name, email: data.email, img: data.img });
-        })
-        .catch((error) => console.error('Error fetching user data:', error));
-    }
-  }, []);
+  // useEffect(() => {
+  //   const userId = Cookies.get('userId');
+  //   if (userId) {
+  //     fetch(`http://localhost:4000/api/users/${userId}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setUserData({ name: data.name, email: data.email, img: data.img });
+  //       })
+  //       .catch((error) => console.error('Error fetching user data:', error));
+  //   }
+  // }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -357,12 +362,11 @@ export default function Appointments() {
     }
   }
 
-  const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
+  // const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
   const handleViewAppointment = (id: string) => {
-    // Implement view appointment logic
-    console.log(`Viewing appointment ${id}`)
+    router.push(`/login/admin/appointments/${id}`)
   }
 
   const handleDeleteAppointment = (id: string) => {
@@ -376,16 +380,18 @@ export default function Appointments() {
   )
 
   return (
-    <div className={`flex flex-col h-screen transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
+    // <div className={`flex flex-col h-screen transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`flex flex-col ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
+
       {/* Header */}
       {/* Header */}
       <header className="flex justify-between items-center p-4 border-b border-gray-700 h-16">
         <div className="flex items-center cursor-pointer" onClick={toggleSidebar}>
-          <img src="/placeholder.svg?height=32&width=32" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
-          <span className="text-xl font-bold">CarePulse</span>
+          <img src="/assets/images/image.png" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
+          <span className="text-xl font-bold">HealthMate</span>
         </div>
         <div className="flex items-center">
-          <img src={userData.img} alt="Admin Avatar" className="w-8 h-8 rounded-full" />
+          <img src="/assets/images/admin.png" alt="Admin Avatar" className="w-8 h-8 rounded-full" />
           <span className="ml-2">{userData.name}</span>
         </div>
       </header>
@@ -458,10 +464,12 @@ export default function Appointments() {
                             <Button size="sm" onClick={() => fetchTransactions(appointment.transactions)} className={`mr-2 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 text-gray-100'} transition-colors duration-300`}>
                               Transactions
                             </Button>
-                            <Button size="sm" variant="outline" onClick={() => handleViewAppointment(appointment._id)} className={`mr-2 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 text-gray-100'} transition-colors duration-300`}>
-                              <Eye className="h-4 w-4 mr-1" />
-                              View
-                            </Button>
+                            <Link href={`/login/admin/appointments/${appointment._id}`}>
+                              <Button size="sm" variant="outline"  className={`mr-2 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 text-gray-100'} transition-colors duration-300`}>
+                                <Eye className="h-4 w-4 mr-1" />
+                                View
+                              </Button>
+                            </Link>
                             <Button size="sm" variant="destructive" onClick={() => handleDeleteAppointment(appointment._id)} className={`mr-2 ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 text-gray-100'} transition-colors duration-300`}>
                               <Trash2 className="h-4 w-4 mr-1" />
                               Delete

@@ -150,7 +150,7 @@ export default function LoginScreen() {
       <div className="lg:flex-1 p-8 lg:p-12 flex flex-col">
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center">
-            <img src="/placeholder.svg?height=32&width=32" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
+            <img src="/assets/images/image.png" alt="CarePulse Logo" className="w-8 h-8 mr-2" />
             <span className="text-xl font-bold">CarePulse</span>
           </div>
           <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="ml-4">
@@ -191,7 +191,7 @@ export default function LoginScreen() {
       </div>
       <div className="lg:flex-1 bg-gray-100">
         <img
-          src="/public/assets/images/loginImg.png"
+          src="/assets/images/labor.jpg"
           alt="Doctor and medical team"
           className="w-full h-full object-cover"
         />
