@@ -128,11 +128,7 @@
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-<<<<<<< Updated upstream
 /******/ 		__webpack_require__.h = () => ("c776489cd2437b57")
-=======
-/******/ 		__webpack_require__.h = () => ("2c900e81dfb7e7a3")
->>>>>>> Stashed changes
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
