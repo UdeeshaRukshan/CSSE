@@ -10,81 +10,62 @@ import {
   Plus,
   Calendar,
   User,
-  Send,
-  ChevronLeft,
-  ChevronRight,
   Home,
   Users,
   Settings,
   LogOut,
-  MessageCircle,
+  Mail,
+  Phone,
+  Briefcase,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+//import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 
-export default function Dashboard() {
+export default function EmployeeList() {
   const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isNewEmployeeFormOpen, setIsNewEmployeeFormOpen] = useState(false);
-  const [isNewStaffFormOpen, setIsNewStaffFormOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState("");
-  const [formData, setFormData] = useState({
-    fullname: "",
-    email: "",
-    age: "",
-    contact: "",
-    password: "",
-    specialization: "",
-    experience: "",
-  });
-  const [staffFormData, setStaffFormData] = useState({
-    fullname: "",
-    email: "",
-    age: "",
-    contact: "",
-    password: "",
-    role: "",
-    experience: "",
-  });
-  const [doctors, setDoctors] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [doctorCount, setDoctorCount] = useState(0);
   const [staffUsername, setStaffUsername] = useState("");
   const [staffFullname, setStaffFullname] = useState("");
   const [staffEmail, setStaffEmail] = useState("");
 
-  const fetchDoctors = async () => {
+  const fetchEmployees = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:4000/api/doctor/all");
-      if (!response.ok) {
+      // Fetch doctors
+      const doctorResponse = await fetch(
+        "http://localhost:4000/api/doctor/all"
+      );
+      if (!doctorResponse.ok) {
         throw new Error("Failed to fetch doctors");
       }
-      const data = await response.json();
-      console.log(data.doctors);
-      console.log(data.doctors.length);
-      setDoctors(data.doctors);
-      setDoctorCount(data.doctors.length);
+      const doctorData = await doctorResponse.json();
+
+      // Fetch other staff members
+      const staffResponse = await fetch("http://localhost:4000/api/staff/all");
+      if (!staffResponse.ok) {
+        throw new Error("Failed to fetch staff members");
+      }
+      const staffData = await staffResponse.json();
+
+      // Combine and set all employees
+      const doctors = Array.isArray(doctorData.doctors)
+        ? doctorData.doctors
+        : [];
+      const staff = Array.isArray(staffData.staff)
+        ? staffData.staff
+        : Array.isArray(staffData)
+          ? staffData
+          : [];
+
+      setEmployees([...doctors, ...staff]);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -103,160 +84,21 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetchDoctors();
+    fetchEmployees();
   }, []);
 
   useEffect(() => {
     const staffDataSession = sessionStorage.getItem("user");
-    console.log("Staff Data", staffDataSession);
     if (staffDataSession) {
       const jsonStaffData = JSON.parse(staffDataSession);
       setStaffUsername(jsonStaffData.username);
       setStaffFullname(jsonStaffData.fullName);
       setStaffEmail(jsonStaffData.email);
-      console.log(staffUsername);
     }
   }, []);
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
-
-  const handleDoctorAdding = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(
-        "http://localhost:4000/api/doctor/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create doctor account");
-      }
-
-      const data = await response.json();
-      console.log("Doctor account created:", data);
-
-      setFormData({
-        fullname: "",
-        email: "",
-        age: "",
-        contact: "",
-        password: "",
-        specialization: "",
-        experience: "",
-      });
-      setIsNewEmployeeFormOpen(false);
-      fetchDoctors();
-    } catch (error) {
-      console.error("Error creating doctor account:", error);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleStaffAdding = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("http://localhost:4000/api/staff/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(staffFormData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create staff account");
-      }
-
-      const data = await response.json();
-      console.log("Staff account created:", data);
-
-      setStaffFormData({
-        fullname: "",
-        email: "",
-        age: "",
-        contact: "",
-        password: "",
-        role: "",
-        experience: "",
-      });
-      setIsNewStaffFormOpen(false);
-    } catch (error) {
-      console.error("Error creating staff account:", error);
-    }
-  };
-
-  const handleStaffInputChange = (e) => {
-    const { name, value } = e.target;
-    setStaffFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSendTemporaryPassword = async (email) => {
-    try {
-      const response = await fetch(
-        "http://localhost:4000/api/send-temporary-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.message || "Failed to send temporary password"
-        );
-      }
-
-      const data = await response.json();
-      console.log("Temporary password sent:", data);
-      // You might want to show a success message to the user here
-    } catch (error) {
-      console.error("Error sending temporary password:", error);
-      // You might want to show an error message to the user here
-    }
-  };
-
-  const statsData = [
-    { title: "Total number of work shifts", value: 94, icon: "📅" },
-    {
-      title: "Total number of available doctors",
-      value: doctorCount,
-      icon: "👨‍💼",
-    },
-    {
-      title: "Total number of workshift cancellation requests",
-      value: 56,
-      icon: "❌",
-    },
-    {
-      title: "Total number of workshift staff complains",
-      value: 56,
-      icon: "📄",
-    },
-    { title: "Total number of recruiments ongoing", value: 56, icon: "👨‍💻" },
-  ];
 
   return (
     <div
@@ -271,7 +113,7 @@ export default function Dashboard() {
         >
           <img
             src="/placeholder.svg?height=32&width=32"
-            alt="CarePulse Logo"
+            alt="SmartMed Logo"
             className="w-8 h-8 mr-2"
           />
           <span className="text-xl font-bold">SmartMed</span>
@@ -314,7 +156,11 @@ export default function Dashboard() {
                 <Home className="mr-2 h-4 w-4" />
                 Dashboard
               </Button>
-              <Button variant="ghost" className="w-full justify-start mb-2">
+              <Button
+                variant="ghost"
+                className="w-full justify-start mb-2"
+                onClick={() => router.push("/login/staff/employees/")}
+              >
                 <User className="mr-2 h-4 w-4" />
                 Employees
               </Button>
@@ -350,7 +196,7 @@ export default function Dashboard() {
               Export PDF
             </Button>
           </div>
-          <div className="p-4 border-t border-gray-700 mt-34">
+          <div className="p-4 border-t border-gray-700 mt-auto">
             <Button variant="ghost" className="w-full justify-start mb-2">
               <Settings className="mr-2 h-4 w-4" />
               Settings
@@ -384,371 +230,81 @@ export default function Dashboard() {
         >
           <div className="h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold">Welcome, {staffFullname}</h1>
-              <div className="space-x-2">
-                <Dialog
-                  open={isNewEmployeeFormOpen}
-                  onOpenChange={setIsNewEmployeeFormOpen}
-                >
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add New Doctor
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent
-                    className={`${
-                      isDarkMode
-                        ? "bg-gray-800 text-white"
-                        : "bg-white text-gray-900"
-                    }`}
-                  >
-                    <DialogHeader>
-                      <DialogTitle>Add New Doctor</DialogTitle>
-                    </DialogHeader>
-                    <form className="space-y-4" onSubmit={handleDoctorAdding}>
-                      <div>
-                        <Label htmlFor="fullname">Full Name</Label>
-                        <Input
-                          id="fullname"
-                          name="fullname"
-                          value={formData.fullname}
-                          onChange={handleInputChange}
-                          placeholder="Enter Doctor's full name"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          type="email"
-                          placeholder="Enter Doctor's email"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="age">Age</Label>
-                        <Input
-                          id="age"
-                          name="age"
-                          value={formData.age}
-                          onChange={handleInputChange}
-                          type="number"
-                          placeholder="Enter Doctor's age"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="contact">Contact</Label>
-                        <Input
-                          id="contact"
-                          name="contact"
-                          value={formData.contact}
-                          onChange={handleInputChange}
-                          type="tel"
-                          placeholder="Enter Doctor's contact number"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                          id="password"
-                          name="password"
-                          value={formData.password}
-                          onChange={handleInputChange}
-                          type="password"
-                          placeholder="Enter Password"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="specialization">Specialization</Label>
-                        <Select
-                          name="specialization"
-                          value={formData.specialization}
-                          onValueChange={(value) =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              specialization: value,
-                            }))
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select the specialization" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Cardiology">
-                              Cardiology
-                            </SelectItem>
-                            <SelectItem value="OMF">OMF</SelectItem>
-                            <SelectItem value="Dental">Dental</SelectItem>
-                            <SelectItem value="OPD">OPD</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label htmlFor="experience">Years of Experience</Label>
-                        <Input
-                          id="experience"
-                          name="experience"
-                          value={formData.experience}
-                          onChange={handleInputChange}
-                          type="number"
-                          placeholder="Enter Doctor's years of experience"
-                          required
-                        />
-                      </div>
-                      <div className="flex justify-between">
-                        <Button type="submit" className="w-1/2 mr-2">
-                          Add Doctor
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="w-1/2 ml-2"
-                          onClick={() =>
-                            handleSendTemporaryPassword(formData.email)
-                          }
-                        >
-                          <Send className="mr-2 h-4 w-4" />
-                          Send Temp Password
-                        </Button>
-                      </div>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-                <Dialog
-                  open={isNewStaffFormOpen}
-                  onOpenChange={setIsNewStaffFormOpen}
-                >
-                  <DialogTrigger asChild>
-                    <Button>
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Other Staff
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent
-                    className={`${
-                      isDarkMode
-                        ? "bg-gray-800 text-white"
-                        : "bg-white text-gray-900"
-                    }`}
-                  >
-                    <DialogHeader>
-                      <DialogTitle>Add New Staff Member</DialogTitle>
-                    </DialogHeader>
-                    <form className="space-y-4" onSubmit={handleStaffAdding}>
-                      <div>
-                        <Label htmlFor="fullname">Full Name</Label>
-                        <Input
-                          id="fullname"
-                          name="fullname"
-                          value={staffFormData.fullname}
-                          onChange={handleStaffInputChange}
-                          placeholder="Enter staff member's full name"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          value={staffFormData.email}
-                          onChange={handleStaffInputChange}
-                          type="email"
-                          placeholder="Enter staff member's email"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="age">Age</Label>
-                        <Input
-                          id="age"
-                          name="age"
-                          value={staffFormData.age}
-                          onChange={handleStaffInputChange}
-                          type="number"
-                          placeholder="Enter staff member's age"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="contact">Contact</Label>
-                        <Input
-                          id="contact"
-                          name="contact"
-                          value={staffFormData.contact}
-                          onChange={handleStaffInputChange}
-                          type="tel"
-                          placeholder="Enter staff member's contact number"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                          id="password"
-                          name="password"
-                          value={staffFormData.password}
-                          onChange={handleStaffInputChange}
-                          type="password"
-                          placeholder="Enter Password"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="role">Role</Label>
-                        <Select
-                          name="role"
-                          value={staffFormData.role}
-                          onValueChange={(value) =>
-                            setStaffFormData((prev) => ({
-                              ...prev,
-                              role: value,
-                            }))
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select the role" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Nurse">Nurse</SelectItem>
-                            <SelectItem value="Technician">
-                              Technician
-                            </SelectItem>
-                            <SelectItem value="Receptionist">
-                              Receptionist
-                            </SelectItem>
-                            <SelectItem value="Administrator">
-                              Administrator
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label htmlFor="experience">Years of Experience</Label>
-                        <Input
-                          id="experience"
-                          name="experience"
-                          value={staffFormData.experience}
-                          onChange={handleStaffInputChange}
-                          type="number"
-                          placeholder="Enter staff member's years of experience"
-                          required
-                        />
-                      </div>
-                      <div className="flex justify-between">
-                        <Button type="submit" className="w-1/2 mr-2">
-                          Add Staff Member
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="w-1/2 ml-2"
-                          onClick={() =>
-                            handleSendTemporaryPassword(staffFormData.email)
-                          }
-                        >
-                          <Send className="mr-2 h-4 w-4" />
-                          Send Temp Password
-                        </Button>
-                      </div>
-                    </form>
-                  </DialogContent>
-                </Dialog>
+              <h1 className="text-3xl font-bold">Employee List</h1>
+              <Button onClick={() => router.push("/login/staff/dashboard")}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add New Employee
+              </Button>
+            </div>
+
+            {isLoading ? (
+              <div className="text-center py-10">Loading employees...</div>
+            ) : error ? (
+              <div className="text-center py-10 text-red-500">
+                Error: {error}
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              {statsData.map((stat, index) => (
-                <div
-                  key={index}
-                  className={`p-4 rounded-lg ${
-                    isDarkMode ? "bg-gray-800" : "bg-gray-100"
-                  } transition-colors duration-300 hover:shadow-lg`}
-                >
-                  <div className="text-3xl mb-2">
-                    {stat.icon} {stat.value}
-                  </div>
-                  <div className="text-sm">{stat.title}</div>
-                </div>
-              ))}
-            </div>
-
-            <div
-              className={`overflow-x-auto rounded-lg ${
-                isDarkMode ? "bg-gray-800" : "bg-gray-100"
-              } transition-colors duration-300`}
-            >
-              <table className="w-full">
-                <thead>
-                  <tr
-                    className={`${isDarkMode ? "bg-gray-700" : "bg-gray-200"}`}
+            ) : employees.length === 0 ? (
+              <div className="text-center py-10">No employees found.</div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {employees.map((employee) => (
+                  <Card
+                    key={employee._id}
+                    className={`${isDarkMode ? "bg-gray-800" : "bg-white"}`}
                   >
-                    <th className="p-2 text-left">Doctor</th>
-                    <th className="p-2 text-left">Specialization</th>
-                    <th className="p-2 text-left">Email</th>
-                    <th className="p-2 text-left">Experience</th>
-                    <th className="p-2 text-left">Contact</th>
-                    <th className="p-2 text-left">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {isLoading ? (
-                    <tr>
-                      <td colSpan={6} className="text-center p-4">
-                        Loading doctors...
-                      </td>
-                    </tr>
-                  ) : error ? (
-                    <tr>
-                      <td colSpan={6} className="text-center p-4 text-red-500">
-                        Error: {error}
-                      </td>
-                    </tr>
-                  ) : doctors.length === 0 ? (
-                    <tr>
-                      <td colSpan={6} className="text-center p-4">
-                        No doctors found.
-                      </td>
-                    </tr>
-                  ) : (
-                    doctors.map((doctor) => (
-                      <tr
-                        key={doctor._id}
-                        className={`${
-                          isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-200"
-                        } transition-colors duration-300`}
-                      >
-                        <td className="p-2">{doctor.fullname}</td>
-                        <td className="p-2">{doctor.specialization}</td>
-                        <td className="p-2">{doctor.email}</td>
-                        <td className="p-2">{doctor.experience} years</td>
-                        <td className="p-2">{doctor.contact}</td>
-                        <td className="p-2">
-                          <Button variant="outline" size="sm" className="mr-2">
-                            Edit
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-red-500"
-                          >
-                            Delete
-                          </Button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+                    <CardHeader className="flex flex-row items-center gap-4">
+                      <Avatar className="h-14 w-14">
+                        <AvatarImage
+                          src={`/placeholder.svg?height=56&width=56`}
+                          alt={employee.fullname}
+                        />
+                        <AvatarFallback>
+                          {employee.fullname
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <CardTitle>{employee.fullname}</CardTitle>
+                        <Badge variant="secondary" className="mt-1">
+                          {employee.specialization || employee.role}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center mb-2">
+                        <Mail className="mr-2 h-4 w-4" />
+                        <span className="text-sm">{employee.email}</span>
+                      </div>
+                      <div className="flex items-center mb-2">
+                        <Phone className="mr-2 h-4 w-4" />
+                        <span className="text-sm">{employee.contact}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Briefcase className="mr-2 h-4 w-4" />
+                        <span className="text-sm">
+                          {employee.experience} years experience
+                        </span>
+                      </div>
+                      <div className="flex justify-between mt-4">
+                        <Button variant="outline" size="sm">
+                          Edit
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-red-500"
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         </main>
       </div>
