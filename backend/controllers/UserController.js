@@ -47,12 +47,10 @@ const createUser = async (req, res) => {
       return res.status(500).json({ message: 'Error creating user', error: error.message });
   }
 };
-
-
+  
 // Login a user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
   try {
       // Check if user exists
       const user = await User.findOne({ email });
@@ -171,7 +169,6 @@ const getUserById = async (req, res) => {
 // Update a user by ID
 const updateUser = async (req, res) => {
     const { id } = req.params;
-
     try {
         const user = await User.findByIdAndUpdate(id, req.body, { new: true });
         if (!user) {
@@ -206,6 +203,24 @@ const deleteUser = async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 };
+
+// Get user role by ID
+exports.getRoleByUserId = async (req, res) => {
+  try {
+      // Find the user by ID
+      const user = await User.findById(req.params.id);
+      
+      // Check if user exists
+      if (!user) {
+          return res.status(404).json({ message: 'User  not found' });
+      }
+
+      // Send the user's role in the response
+      res.status(200).json({ role: user.role });
+  } catch (error) {
+      console.error('Error retrieving user role:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
 
 // Export the functions using CommonJS
 module.exports = {

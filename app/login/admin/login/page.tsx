@@ -1,15 +1,37 @@
-// 'use client'
 
-// import { useState } from 'react'
-// import { Moon, Sun, User, Mail, Phone } from 'lucide-react'
-// import { Button } from "@/components/ui/button"
-// import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
+// 'use client';
+
+// import { useRouter } from 'next/navigation';
+// import { useState } from 'react';
+// import { Moon, Sun, User } from 'lucide-react';
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
 
 // export default function LoginScreen() {
-//   const [isDarkMode, setIsDarkMode] = useState(true)
+//   const [isDarkMode, setIsDarkMode] = useState(true);
+//   const router = useRouter();
+//   const [formData, setFormData] = useState({
+//     username: '',
+//     password: ''
+//   });
 
-//   const toggleDarkMode = () => setIsDarkMode(!isDarkMode)
+//   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+
+//   const handleSubmit = (e:any) => {
+//     e.preventDefault();
+//     // Handle form submission logic here
+//     console.log('Form submitted:', formData);
+//     router.push('/login/admin/dashboard'); // Navigate to the login admin page
+//   };
+
+//   const handleChange = (e:any) => {
+//     const { name, value } = e.target;
+//     setFormData({
+//       ...formData,
+//       [name]: value
+//     });
+//   };
 
 //   return (
 //     <div className={`min-h-screen flex flex-col lg:flex-row ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
@@ -24,23 +46,33 @@
 //           </Button>
 //         </div>
 //         <div className="flex-grow flex flex-col justify-center max-w-md mx-auto w-full">
-//           <h1 className="text-3xl font-bold mb-2">Hi there, ....</h1>
-//           <p className="text-lg mb-8 text-gray-400">Get Started with Appointments.</p>
-//           <form className="space-y-6">
+//           <h1 className="text-3xl font-bold mb-2">Welcome Back!</h1>
+//           <p className="text-lg mb-8 text-gray-400">Login to your account.</p>
+//           <form className="space-y-6" onSubmit={handleSubmit}>
 //             <div>
-//               <Label htmlFor="fullName">Full name</Label>
-//               <Input id="fullName" type="text" icon={<User className="text-gray-500" />} defaultValue="Adrian Hajdin" />
+//               <Label htmlFor="username">Username</Label>
+//               <Input
+//                 id="username"
+//                 name="username"
+//                 type="text"
+//                 value={formData.username}
+//                 onChange={handleChange}
+//                 placeholder="Enter your username"
+//               />
 //             </div>
 //             <div>
-//               <Label htmlFor="email">Email address</Label>
-//               <Input id="email" type="email" icon={<Mail className="text-gray-500" />} defaultValue="adrian@jsmastery.pro" />
-//             </div>
-//             <div>
-//               <Label htmlFor="phone">Phone number</Label>
-//               <Input id="phone" type="tel" icon={<Phone className="text-gray-500" />} defaultValue="+00 0342 0453 34" />
+//               <Label htmlFor="password">Password</Label>
+//               <Input
+//                 id="password"
+//                 name="password"
+//                 type="password"
+//                 value={formData.password}
+//                 onChange={handleChange}
+//                 placeholder="Enter your password"
+//               />
 //             </div>
 //             <Button type="submit" className="w-full bg-emerald-500 hover:bg-emerald-600 text-white">
-//               Get Started
+//               Login
 //             </Button>
 //           </form>
 //         </div>
@@ -50,43 +82,62 @@
 //       </div>
 //       <div className="lg:flex-1 bg-gray-100">
 //         <img
-//           src="public/assets/images/loginImg.png"
+//           src="/public/assets/images/loginImg.png"
 //           alt="Doctor and medical team"
 //           className="w-full h-full object-cover"
 //         />
 //       </div>
 //     </div>
-//   )
+//   );
 // }
 
-
-'use client';
+'use client'
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Moon, Sun, User } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Cookies from 'js-cookie'; // Import cookie library
 
 export default function LoginScreen() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const router = useRouter();
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted:', formData);
-    router.push('/login/admin/dashboard'); // Navigate to the login admin page
+    try {
+      const response = await fetch('http://localhost:4000/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store user ID in a cookie
+        Cookies.set('userId', data.userId, { expires: 1, sameSite: 'strict' });
+
+        // Redirect to the admin dashboard
+        router.push('/login/admin/dashboard');
+      } else {
+        console.error('Login failed:', data.message);
+      }
+    } catch (error) {
+      console.error('Error submitting login form:', error);
+    }
   };
 
-  const handleChange = (e:any) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -111,14 +162,14 @@ export default function LoginScreen() {
           <p className="text-lg mb-8 text-gray-400">Login to your account.</p>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
-                id="username"
-                name="username"
-                type="text"
-                value={formData.username}
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your username"
+                placeholder="Enter your email"
               />
             </div>
             <div>
@@ -136,9 +187,6 @@ export default function LoginScreen() {
               Login
             </Button>
           </form>
-        </div>
-        <div className="mt-8 text-sm text-gray-500">
-          @carepulse copyright
         </div>
       </div>
       <div className="lg:flex-1 bg-gray-100">

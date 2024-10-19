@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PDFDocument = ({ appointmentData, statsData }) => {
+const PDFDocument = ({ data, statsData }) => {
   const [chartUrl, setChartUrl] = useState('');
 
   const chartData = {
@@ -122,50 +122,6 @@ const PDFDocument = ({ appointmentData, statsData }) => {
       borderWidth: 1
     }]
   };
-
-
-//   useEffect(() => {
-//     const generateChart = async () => {
-//       const myChart = new ChartJSImage();
-//       myChart.setConfig({
-//         type: 'bar',
-//         data: {
-//           labels: statsData.map(stat => stat.title),
-//           datasets: [{
-//             label: 'Appointments',
-//             data: statsData.map(stat => stat.value),
-//             backgroundColor: [
-//               'rgba(255, 99, 132, 0.8)',
-//               'rgba(54, 162, 235, 0.8)',
-//               'rgba(255, 206, 86, 0.8)',
-//             ],
-//             borderColor: [
-//               'rgba(255, 99, 132, 1)',
-//               'rgba(54, 162, 235, 1)',
-//               'rgba(255, 206, 86, 1)',
-//             ],
-//             borderWidth: 1
-//           }]
-//         },
-//         options: {
-//           scales: {
-//             y: {
-//               beginAtZero: true
-//             }
-//           }
-//         }
-//       });
-
-//       myChart.setWidth(500);
-//       myChart.setHeight(300);
-//       myChart.setBackgroundColor('white');
-
-//       const url = await myChart.getUrl();
-//       setChartUrl(url);
-//     };
-
-//     generateChart();
-//   }, [statsData]);
 
   return (
     <Document>
@@ -220,7 +176,7 @@ const PDFDocument = ({ appointmentData, statsData }) => {
                 <Text style={styles.tableCell}>Doctor</Text>
               </View>
             </View>
-            {appointmentData.map((appointment, index) => (
+            {data.map((appointment, index) => (
               <View style={styles.tableRow} key={index}>
                 <View style={styles.tableCol}>
                   <Text style={styles.tableCell}>{appointment.patient}</Text>
