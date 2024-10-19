@@ -141,6 +141,7 @@ export default function Employees() {
     }
   };
   const navigateNewAppointment = () => {
+    console.log("Navigating to new appointment page");
     router.push("/login/patients/login/new-appointment");
   }
 
@@ -266,10 +267,12 @@ export default function Employees() {
           <div className="h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-3xl font-bold">Welcome, Patient</h1>
-              <Button onClick={()=>navigateNewAppointment}>
+              
+              <Button onClick={navigateNewAppointment}>
                 <Plus className="w-6 h-6 mr-2" />
                 New Appointment
               </Button>
+
             </div>
 
             {/* Appointment Statistics */}
