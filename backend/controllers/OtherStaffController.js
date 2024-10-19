@@ -37,7 +37,7 @@ const registerOtherStaff = async (req, res) => {
 
 const getAllOtherStaff = async (req, res) => {
     try {
-        const otherStaff= await OtherStaff.find(); // Fetch all doctors from the database
+        const otherStaff= await OtherStaff.find(); 
 
         res.status(200).json({
             message: 'Staff retrieved successfully',

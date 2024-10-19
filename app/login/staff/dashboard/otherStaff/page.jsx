@@ -29,45 +29,26 @@ export default function EmployeeList() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [employees, setEmployees] = useState([]);
+  const [staff, setStaff] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [staffUsername, setStaffUsername] = useState("");
   const [staffFullname, setStaffFullname] = useState("");
   const [staffEmail, setStaffEmail] = useState("");
 
-  const fetchEmployees = async () => {
+  const fetchStaff = async () => {
     setIsLoading(true);
     try {
-      // Fetch doctors
-      const doctorResponse = await fetch(
-        "http://localhost:4000/api/doctor/all"
-      );
-      if (!doctorResponse.ok) {
-        throw new Error("Failed to fetch doctors");
-      }
-      const doctorData = await doctorResponse.json();
-
-      // Fetch other staff members
-      const staffResponse = await fetch(
-        "http://localhost:4000/api/otherStaff/all"
-      );
-      if (!staffResponse.ok) {
+      const response = await fetch("http://localhost:4000/api/otherStaff/all");
+      if (!response.ok) {
         throw new Error("Failed to fetch staff members");
       }
-      const staffData = await staffResponse.json();
+      const data = await response.json();
 
-      // Combine and set all employees
-      const doctors = Array.isArray(doctorData.doctors)
-        ? doctorData.doctors
-        : [];
-      const staff = Array.isArray(staffData.staff)
-        ? staffData.staff
-        : Array.isArray(staffData)
-          ? staffData
-          : [];
-
-      setEmployees([...doctors, ...staff]);
+      console.log(data);
+      // Ensure we're working with an array of staff members
+      const staffArray = Array.isArray(data) ? data : data.OtherStaff || [];
+      setStaff(staffArray);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -86,7 +67,7 @@ export default function EmployeeList() {
   }, []);
 
   useEffect(() => {
-    fetchEmployees();
+    fetchStaff();
   }, []);
 
   useEffect(() => {
@@ -161,10 +142,10 @@ export default function EmployeeList() {
               <Button
                 variant="ghost"
                 className="w-full justify-start mb-2"
-                onClick={() => router.push("/login/staff/employees/")}
+                onClick={() => router.push("/login/staff/dashboard/otherStaff")}
               >
                 <User className="mr-2 h-4 w-4" />
-                Employees
+                Other Employees
               </Button>
               <Button variant="ghost" className="w-full justify-start mb-2">
                 <Calendar className="mr-2 h-4 w-4" />
@@ -232,36 +213,32 @@ export default function EmployeeList() {
         >
           <div className="h-[calc(100vh-4rem)] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold">Employee List</h1>
-              <Button onClick={() => router.push("/login/staff/dashboard")}>
-                <Plus className="mr-2 h-4 w-4" />
-                Add New Employee
-              </Button>
+              <h1 className="text-3xl font-bold">Other Staff List</h1>
             </div>
 
             {isLoading ? (
-              <div className="text-center py-10">Loading employees...</div>
+              <div className="text-center py-10">Loading staff members...</div>
             ) : error ? (
               <div className="text-center py-10 text-red-500">
                 Error: {error}
               </div>
-            ) : employees.length === 0 ? (
-              <div className="text-center py-10">No employees found.</div>
+            ) : staff.length === 0 ? (
+              <div className="text-center py-10">No staff members found.</div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {employees.map((employee) => (
+                {staff.map((member) => (
                   <Card
-                    key={employee._id}
+                    key={member._id}
                     className={`${isDarkMode ? "bg-gray-800" : "bg-white"}`}
                   >
                     <CardHeader className="flex flex-row items-center gap-4">
                       <Avatar className="h-14 w-14">
                         <AvatarImage
                           src={`/placeholder.svg?height=56&width=56`}
-                          alt={employee.fullname}
+                          alt={member.fullname}
                         />
                         <AvatarFallback>
-                          {employee.fullname
+                          {member.fullname
                             .split(" ")
                             .map((n) => n[0])
                             .join("")
@@ -269,25 +246,25 @@ export default function EmployeeList() {
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
-                        <CardTitle>{employee.fullname}</CardTitle>
+                        <CardTitle>{member.fullname}</CardTitle>
                         <Badge variant="secondary" className="mt-1">
-                          {employee.specialization || employee.role}
+                          {member.role}
                         </Badge>
                       </div>
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-center mb-2">
                         <Mail className="mr-2 h-4 w-4" />
-                        <span className="text-sm">{employee.email}</span>
+                        <span className="text-sm">{member.email}</span>
                       </div>
                       <div className="flex items-center mb-2">
                         <Phone className="mr-2 h-4 w-4" />
-                        <span className="text-sm">{employee.contact}</span>
+                        <span className="text-sm">{member.contact}</span>
                       </div>
                       <div className="flex items-center">
                         <Briefcase className="mr-2 h-4 w-4" />
                         <span className="text-sm">
-                          {employee.experience} years experience
+                          {member.experience} years experience
                         </span>
                       </div>
                       <div className="flex justify-between mt-4">
