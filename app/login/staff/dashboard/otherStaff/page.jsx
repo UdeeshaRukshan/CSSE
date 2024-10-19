@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-//import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 
@@ -49,7 +49,9 @@ export default function EmployeeList() {
       const doctorData = await doctorResponse.json();
 
       // Fetch other staff members
-      const staffResponse = await fetch("http://localhost:4000/api/staff/all");
+      const staffResponse = await fetch(
+        "http://localhost:4000/api/otherStaff/all"
+      );
       if (!staffResponse.ok) {
         throw new Error("Failed to fetch staff members");
       }
