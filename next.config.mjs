@@ -1,12 +1,7 @@
 import { withSentryConfig } from "@sentry/nextjs";
-
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  images: {
-    domains: ['png.pngtree.com'], // Add your image domain here
-  },
-};
+const nextConfig = {};
+
 export default withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options

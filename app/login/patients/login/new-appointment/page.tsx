@@ -11,10 +11,10 @@ const Appointment = () => {
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true); // For handling loading state
   const [error, setError] = useState(null); // For handling errors
-  const router = useRouter(); 
+  const router = useRouter(); // Use Next.js router for redirection
   const [uId, setUserId] = useState(null);
   useEffect(() => {
-    const userId = Cookies.get("userId"); 
+    const userId = Cookies.get("userId"); // Moved userId inside useEffect
     setUserId(userId);
     const fetchPatientData = async () => {
       try {
@@ -63,14 +63,21 @@ const Appointment = () => {
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[860px] flex-1 justify-between">
-         
+          <Image
+            src="/assets/icons/logo-full.svg"
+            height={1000}
+            width={1000}
+            alt="logo"
+            className="mb-12 h-10 w-fit"
+          />
+
           <AppointmentForm
             patientId={patient._id} // Ensure patient ID is correct
             userId={uId}
             type="create"
           />
 
-         
+          <p className="copyright mt-10 py-12">© 2024 CarePluse</p>
         </div>
       </section>
 

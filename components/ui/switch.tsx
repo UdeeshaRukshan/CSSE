@@ -26,8 +26,4 @@ const Switch = React.forwardRef<
 ))
 Switch.displayName = SwitchPrimitives.Root.displayName
 
-<<<<<<< HEAD
 export { Switch }
-=======
-export { Switch }
->>>>>>> 15a11733eccccc0f91cee2e11304eaa0f2e5cd46
