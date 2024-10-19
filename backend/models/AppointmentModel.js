@@ -24,13 +24,17 @@ const AppointmentSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['scheduled', 'completed', 'canceled'], // Example statuses
+    enum: ['scheduled', 'completed', 'cancelled'], // Example statuses
     default: 'scheduled',
   },
   note: {
     type: String,
     required: false,
   },
+  transactions: [{
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Transaction',
+  }] ,
 }, { timestamps: true }); // Automatically manage createdAt and updatedAt fields
 
 const Appointment = mongoose.model('Appointment', AppointmentSchema);
