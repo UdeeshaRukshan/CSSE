@@ -106,7 +106,6 @@ export default function UserProfile() {
           </div>
         </CardContent>
 
-        {/* Go Back Button */}
         <div className="flex justify-end mt-6">
           <Button onClick={() => router.push('/login/patients/login/patient')} className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
             Go Back

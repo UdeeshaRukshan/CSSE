@@ -43,7 +43,7 @@ export default function LoginScreen() {
         Cookies.set('userId', data.userId, { expires: 1 });
         Cookies.set('authToken', data.authToken, { expires: 1 });
 
-        router.push('/login/patients/login/new-appointment');
+        router.push('/login/patients/login/patient');
       } else {
         setError('Invalid email or password.');
       }
