@@ -41,10 +41,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/login/staff/dashboard/otherStaff/page.js"
     ],
-    "/_not-found/page": [
+    "/login/staff/dashboard/salaryGeneration/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/login/staff/dashboard/salaryGeneration/page.js"
     ]
   }
 }
