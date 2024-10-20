@@ -17,7 +17,6 @@ import {
   Mail,
   Phone,
   Briefcase,
-  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -148,6 +147,10 @@ export default function EmployeeList() {
                 <User className="mr-2 h-4 w-4" />
                 Other Employees
               </Button>
+              <Button variant="ghost" className="w-full justify-start mb-2">
+                <Calendar className="mr-2 h-4 w-4" />
+                Employee Progress
+              </Button>
               <Button
                 variant="ghost"
                 className="w-full justify-start mb-2"
@@ -155,16 +158,6 @@ export default function EmployeeList() {
               >
                 <Users className="mr-2 h-4 w-4" />
                 Work Shifts
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start mb-2"
-                onClick={() =>
-                  router.push("/login/staff/dashboard/salaryGeneration")
-                }
-              >
-                <DollarSign className="mr-2 h-4 w-4" />
-                Salary Generation
               </Button>
             </div>
           </nav>

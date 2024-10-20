@@ -18,7 +18,6 @@ import {
   Settings,
   LogOut,
   MessageCircle,
-  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -71,29 +70,6 @@ export default function Dashboard() {
   const [staffUsername, setStaffUsername] = useState("");
   const [staffFullname, setStaffFullname] = useState("");
   const [staffEmail, setStaffEmail] = useState("");
-  const [staff, setStaff] = useState([]);
-  const [staffCount, setStaffCount] = useState(0);
-
-  const fetchStaff = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch("http://localhost:4000/api/otherStaff/all");
-      if (!response.ok) {
-        throw new Error("Failed to fetch staff members");
-      }
-      const data = await response.json();
-
-      console.log(data);
-      setStaffCount(data.OtherStaff.length);
-      // Ensure we're working with an array of staff members
-      const staffArray = Array.isArray(data) ? data : data.OtherStaff || [];
-      setStaff(staffArray);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const fetchDoctors = async () => {
     setIsLoading(true);
@@ -126,7 +102,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchDoctors();
-    fetchStaff();
   }, []);
 
   useEffect(() => {
@@ -261,26 +236,6 @@ export default function Dashboard() {
       // You might want to show an error message to the user here
     }
   };
-  const handleDeleteDoctor = async (username) => {
-    try {
-      const response = await fetch(
-        `http://localhost:4000/api/doctor/username/${username}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to delete doctor");
-      }
-
-      // Refresh the doctors list after successful deletion
-      fetchDoctors();
-    } catch (error) {
-      console.error("Error deleting doctor:", error);
-      setError(error.message);
-    }
-  };
 
   const statsData = [
     { title: "Total number of work shifts", value: 94, icon: "📅" },
@@ -299,11 +254,7 @@ export default function Dashboard() {
       value: 56,
       icon: "📄",
     },
-    {
-      title: "Total number of working staff ongoing",
-      value: staffCount,
-      icon: "👨‍💻",
-    },
+    { title: "Total number of recruiments ongoing", value: 56, icon: "👨‍💻" },
   ];
 
   return (
@@ -370,23 +321,17 @@ export default function Dashboard() {
                 <User className="mr-2 h-4 w-4" />
                 Other Employees
               </Button>
+              <Button variant="ghost" className="w-full justify-start mb-2">
+                <Calendar className="mr-2 h-4 w-4" />
+                Employee Progress
+              </Button>
               <Button
                 variant="ghost"
                 className="w-full justify-start mb-2"
                 onClick={() => router.push("/login/staff/dashboard/workshift")}
               >
-                <Calendar className="mr-2 h-4 w-4" />
+                <Users className="mr-2 h-4 w-4" />
                 Work Shifts
-              </Button>
-              <Button
-                variant="ghost"
-                className="w-full justify-start mb-2"
-                onClick={() =>
-                  router.push("/login/staff/dashboard/salaryGeneration")
-                }
-              >
-                <DollarSign className="mr-2 h-4 w-4" />
-                Salary Generation
               </Button>
             </div>
           </nav>
@@ -766,13 +711,15 @@ export default function Dashboard() {
                         <td className="p-2">{doctor.experience} years</td>
                         <td className="p-2">{doctor.contact}</td>
                         <td className="p-2">
+                          <Button variant="outline" size="sm" className="mr-2">
+                            Edit
+                          </Button>
                           <Button
                             variant="outline"
                             size="sm"
                             className="text-red-500"
-                            onClick={() => handleDeleteDoctor(doctor.fullname)}
                           >
-                            Remove
+                            Delete
                           </Button>
                         </td>
                       </tr>
