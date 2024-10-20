@@ -1,4 +1,4 @@
-// File: /Users/nikleshfernando/Desktop/SLIIT_UNI/CSSE/CSSE/app/login/staff/login/page.js
+// File: /Users/nikleshfernando/Desktop/SLIIT_UNI/CSSE/CSSE/app/login/staff/login/page.tsx
 import * as entry from '../../../../../../app/login/staff/login/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

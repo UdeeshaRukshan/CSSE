@@ -1,6 +1,7 @@
 {
-  "/login/staff/dashboard/page": "app/login/staff/dashboard/page.js",
-  "/login/staff/dashboard/workshift/page": "app/login/staff/dashboard/workshift/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/login/staff/dashboard/otherStaff/page": "app/login/staff/dashboard/otherStaff/page.js",
-  "/login/staff/dashboard/salaryGeneration/page": "app/login/staff/dashboard/salaryGeneration/page.js"
+  "/login/staff/dashboard/salaryGeneration/page": "app/login/staff/dashboard/salaryGeneration/page.js",
+  "/login/staff/dashboard/workshift/page": "app/login/staff/dashboard/workshift/page.js",
+  "/login/staff/login/page": "app/login/staff/login/page.js"
 }
