@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/page": [
+    "/global-error": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/global-error.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -16,10 +16,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/loading.js"
     ],
-    "/global-error": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/global-error.js"
+      "static/chunks/app/page.js"
     ],
     "/login/staff/login/page": [
       "static/chunks/webpack.js",
@@ -30,11 +30,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/login/staff/dashboard/page.js"
-    ],
-    "/login/staff/dashboard/workshift/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/login/staff/dashboard/workshift/page.js"
     ],
     "/login/staff/dashboard/otherStaff/page": [
       "static/chunks/webpack.js",
