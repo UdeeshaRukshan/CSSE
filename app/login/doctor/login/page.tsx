@@ -102,9 +102,9 @@ export default function LoginScreen() {
             <Button type="submit" className="w-full bg-emerald-500 hover:bg-emerald-600 text-white">
               Login
             </Button>
-            <Button onClick={handleSignUp} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white">
+            {/* <Button onClick={handleSignUp} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white">
               Sign up
-            </Button>
+            </Button> */}
           </form>
         </div>
         <div className="mt-8 text-sm text-gray-500">

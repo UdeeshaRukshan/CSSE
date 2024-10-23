@@ -1118,7 +1118,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import { Search, ChevronLeft, ChevronRight, Plus, X } from 'lucide-react'
 import Cookies from 'js-cookie';
-
+import DefaultSidebar from '@/app/login/doctor/sidebar/page'
 
 interface Doctor {
   _id: string;
@@ -1300,23 +1300,7 @@ export default function PatientMedicalHistory() {
             SmartMed
           </h1>
         </div>
-        <nav className="mt-4">
-          <div className="px-4 py-2 text-sm text-gray-600 font-bold">Doctor's Menu</div>
-          {["Today's Appointments", 'Upcoming Appointments', 'My Patients', 'My Profile'].map((item, index) => (
-            <a
-              key={index}
-              href="#"
-              className={`block px-4 py-2 text-sm ${
-                item === "Today's Appointments" ? 'bg-[#E5EEF6] text-[#1C4980] font-semibold' : 'text-gray-600'
-              }`}
-            >
-              {item}
-              {item === "Today's Appointments" && (
-                <span className="float-right bg-[#1C4980] text-white rounded-full px-2 py-1 text-xs">24</span>
-              )}
-            </a>
-          ))}
-        </nav>
+     <DefaultSidebar/>
       </div>
 
       {/* Main Content */}

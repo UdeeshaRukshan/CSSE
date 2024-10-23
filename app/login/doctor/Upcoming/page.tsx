@@ -149,8 +149,8 @@ import { Search, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import Cookies from 'js-cookie';
-import PatientFacade from './Facade/PatientFacade'
-import DefaultSidebar from './sidebar/page'
+import PatientFacade from '../Facade/PatientFacade'
+import DefaultSidebar from '../sidebar/page'
 
 
 
@@ -210,7 +210,7 @@ export default function DoctorDashboard() {
     const fetchAppointments = async () => {
       setIsLoading(true);
       try {
-        const response = await PatientFacade.getTodaysAppointments(doctorId);
+        const response = await PatientFacade.getUpcomingAppointments(doctorId);
         if (!response.ok) {
           throw new Error('Failed to fetch appointments');
         }
@@ -305,7 +305,7 @@ export default function DoctorDashboard() {
         {/* Dashboard Content */}
         <main className="flex-1 p-6 overflow-auto">
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold mb-4 text-black">Your Appointments Today</h2>
+            <h2 className="text-xl font-semibold mb-4 text-black">Your UpComing Appointments</h2>
             <div className="bg-[#F2F9FF] rounded-lg p-4">
               {isLoading ? (
                 <p className="text-center py-4">Loading appointments...</p>

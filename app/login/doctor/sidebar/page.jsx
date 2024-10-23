@@ -139,26 +139,90 @@
 //   }
   
 
+// 'use client'
+
+// import React from 'react'
+// import { useRouter, usePathname } from 'next/navigation'
+// import Link from 'next/link'
+// import { Calendar, Users, User, ChevronRight } from 'lucide-react'
+
+// const menuItems = [
+//   { name: "Today's Appointments", icon: Calendar, path: '/appointments/today' },
+//   { name: 'Upcoming Appointments', icon: Calendar, path: '/appointments/upcoming' },
+//   { name: 'My Patients', icon: Users, path: '/patients' },
+//   { name: 'My Profile', icon: User, path: '/profile' },
+// ]
+
+// export default function Sidebar() {
+//   const router = useRouter()
+//   const pathname = usePathname()
+
+//   return (
+//     <div className="w-64 bg-white shadow-md h-screen">
+//       {/* <div className="p-4 bg-[#1C4980] text-white">
+//         <h1 className="text-2xl font-bold flex items-center">
+//           <span className="bg-white text-[#1C4980] p-1 rounded mr-2">
+//             <img src="/placeholder.svg?height=24&width=24" alt="Logo" className="w-6 h-6" />
+//           </span>
+//           SmartMed
+//         </h1>
+//       </div> */}
+//       <nav className="mt-4">
+//         <div className="px-4 py-2 text-sm text-gray-600 font-bold">Doctor's Menu</div>
+//         {menuItems.map((item, index) => (
+//           <Link
+//             key={index}
+//             href={item.path}
+//             className={`block px-4 py-2 text-sm transition-colors duration-200 ease-in-out
+//               ${pathname === item.path
+//                 ? 'bg-[#E5EEF6] text-[#1C4980] font-semibold'
+//                 : 'text-gray-600 hover:bg-[#F0F7FF] hover:text-[#1C4980]'
+//               }`}
+//           >
+//             <div className="flex items-center justify-between">
+//               <div className="flex items-center">
+//                 <item.icon className="w-5 h-5 mr-3" />
+//                 {item.name}
+//               </div>
+//               {pathname === item.path && <ChevronRight className="w-4 h-4" />}
+//             </div>
+//             {/* {item.name === "Today's Appointments" && (
+//               <span className="float-right bg-[#1C4980] text-white rounded-full px-2 py-1 text-xs ml-2">
+//                 24
+//               </span>
+//             )} */}
+//           </Link>
+//         ))}
+//       </nav>
+//     </div>
+//   )
+// }
+
+
 'use client'
 
 import React from 'react'
-import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, Users, User, ChevronRight } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Calendar, Users, User, ChevronRight, LogOut } from 'lucide-react'
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { LogoutButton } from '../logout/page'
+
 
 const menuItems = [
-  { name: "Today's Appointments", icon: Calendar, path: '/appointments/today' },
+  { name: "Today's Appointments", icon: Calendar, path: '/login/doctor' },
   { name: 'Upcoming Appointments', icon: Calendar, path: '/appointments/upcoming' },
   { name: 'My Patients', icon: Users, path: '/patients' },
   { name: 'My Profile', icon: User, path: '/profile' },
 ]
 
 export default function Sidebar() {
-  const router = useRouter()
   const pathname = usePathname()
 
   return (
-    <div className="w-64 bg-white shadow-md h-screen">
+    <div className="w-64 bg-white shadow-md h-screen flex flex-col">
       {/* <div className="p-4 bg-[#1C4980] text-white">
         <h1 className="text-2xl font-bold flex items-center">
           <span className="bg-white text-[#1C4980] p-1 rounded mr-2">
@@ -167,33 +231,34 @@ export default function Sidebar() {
           SmartMed
         </h1>
       </div> */}
-      <nav className="mt-4">
+      <nav className="flex-grow overflow-y-auto">
         <div className="px-4 py-2 text-sm text-gray-600 font-bold">Doctor's Menu</div>
-        {menuItems.map((item, index) => (
-          <Link
-            key={index}
-            href={item.path}
-            className={`block px-4 py-2 text-sm transition-colors duration-200 ease-in-out
-              ${pathname === item.path
-                ? 'bg-[#E5EEF6] text-[#1C4980] font-semibold'
-                : 'text-gray-600 hover:bg-[#F0F7FF] hover:text-[#1C4980]'
-              }`}
-          >
-            <div className="flex items-center justify-between">
+        {menuItems.map((item) => {
+          const isActive = pathname === item.path
+          return (
+            <Link
+              key={item.name}
+              href={item.path}
+              className={cn(
+                "flex items-center justify-between px-4 py-2 text-sm transition-colors duration-200 ease-in-out",
+                isActive
+                  ? "bg-[#E5EEF6] text-[#1C4980] font-semibold"
+                  : "text-gray-600 hover:bg-[#F0F7FF] hover:text-[#1C4980]"
+              )}
+            >
               <div className="flex items-center">
                 <item.icon className="w-5 h-5 mr-3" />
                 {item.name}
               </div>
-              {pathname === item.path && <ChevronRight className="w-4 h-4" />}
-            </div>
-            {/* {item.name === "Today's Appointments" && (
-              <span className="float-right bg-[#1C4980] text-white rounded-full px-2 py-1 text-xs ml-2">
-                24
-              </span>
-            )} */}
-          </Link>
-        ))}
+              {isActive && <ChevronRight className="w-4 h-4" />}
+            </Link>
+          )
+        })}
       </nav>
+      <div className="p-4">
+        <Separator className="my-2" />
+        <LogoutButton />
+      </div>
     </div>
   )
 }

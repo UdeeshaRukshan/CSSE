@@ -4,6 +4,13 @@ class PatientFacade {
         const response = await fetch(`http://localhost:4000/api/doctorappointment/doctor/${doctorId}/today-appointments`);
         return response;
       }
+
+      async getUpcomingAppointments(doctorId: string) {
+        const response = await fetch(`http://localhost:4000/api/doctorappointment/doctor/${doctorId}/upcoming-appointments`);
+        return response;
+      }
+
+
     
 }
 

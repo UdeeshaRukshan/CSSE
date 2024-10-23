@@ -328,8 +328,9 @@ import { useParams } from 'next/navigation'
 import { Search, ChevronLeft, ChevronRight, User, Mail, Calendar, MapPin, Briefcase, Phone, UserPlus, FileText, AlertCircle, Pill, Heart, FileCheck, CreditCard } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation'
-import DefaultSidebar from '../sidebar/page'
+import DefaultSidebar from '@/app/login/doctor/sidebar/page'
 
+ 
 interface PatientDetails {
   _id: string;
   username:string,
@@ -418,7 +419,8 @@ export default function PatientDetailsPage() {
             SmartMed
           </h1>
         </div>
-        <nav className="mt-4">
+        <DefaultSidebar/>
+        {/* <nav className="mt-4">
           <div className="px-4 py-2 text-sm text-gray-600 font-bold">Doctor's Menu</div>
           {["Today's Appointments", 'Upcoming Appointments', 'My Patients', 'My Profile'].map((item, index) => (
             <a
@@ -434,7 +436,7 @@ export default function PatientDetailsPage() {
               )}
             </a>
           ))}
-        </nav>
+        </nav> */}
       </div>
 
       {/* Main Content */}

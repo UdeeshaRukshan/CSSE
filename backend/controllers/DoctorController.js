@@ -170,10 +170,10 @@ const createDoctor = async (req, res) => {
 // Get a doctor by ID
 const getDoctorById = async (req, res) => {
   try {
-    const { doctorId } = req.params;
+    const {id}  = req.params;
 
     // Find the doctor by ID
-    const doctor = await Doctor.findById(doctorId);
+    const doctor = await Doctor.findById(id);
 
     // If doctor is not found
     if (!doctor) {
