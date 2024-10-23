@@ -150,6 +150,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import Cookies from 'js-cookie';
 import PatientFacade from './Facade/PatientFacade'
+import DefaultSidebar from './sidebar/page'
 
 
 
@@ -157,6 +158,7 @@ import PatientFacade from './Facade/PatientFacade'
 interface Appointment {
   id: string;
   patient: string;
+  patientId:string;
   date: string;
   time: string;
 }
@@ -167,6 +169,7 @@ export default function DoctorDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [doctorId, setDoctorId] = useState<string | null>(null);
   const router = useRouter();
+  
   
 
   const handlePatientClick = (patientId: string,appointmentId: string) => {
@@ -213,7 +216,8 @@ export default function DoctorDashboard() {
         const data = await response.json();
         const filteredAppointments = data.data.map((appointment: any) => ({
           id: appointment._id,
-          patient: appointment.patient.userId,
+          patient: appointment.patient.username,
+          patientId:appointment.patient._id,
           date: appointment.appointmentDate,
           time: appointment.time
         }));
@@ -250,7 +254,9 @@ export default function DoctorDashboard() {
             SmartMed
           </h1>
         </div>
-        <nav className="mt-4">
+        
+      <DefaultSidebar/>
+        {/* <nav className="mt-4">
           <div className="px-4 py-2 text-sm text-gray-600 font-bold">Doctor's Menu</div>
           {["Today's Appointments", 'Upcoming Appointments', 'My Patients', 'My Profile'].map((item, index) => (
             <a
@@ -268,7 +274,8 @@ export default function DoctorDashboard() {
               )}
             </a>
           ))}
-        </nav>
+        </nav> */}
+    
       </div>
 
       {/* Main Content */}
@@ -318,7 +325,7 @@ export default function DoctorDashboard() {
                       <tr key={appointment.id} className={index % 2 === 0 ? 'bg-white' : ''}>
                         <td className="py-2 text-black">
                           <div className="flex items-center">
-                            <button onClick={() => handlePatientClick(appointment.patient,appointment.id)}
+                            <button onClick={() => handlePatientClick(appointment.patientId,appointment.id)}
                             
                               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold mr-2 ${
                                 ['bg-green-200', 'bg-blue-200', 'bg-purple-200', 'bg-yellow-200', 'bg-red-200'][index % 5]

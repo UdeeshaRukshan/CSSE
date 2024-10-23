@@ -356,10 +356,10 @@ const createAppointment = async (req, res) => {
   };
 
   const getPatientById = async (req, res) => {
-    const {userId}  = req.params; // Extract userId from route params
+    const {id}  = req.params; // Extract userId from route params
   
     try {
-      const patient = await Patient.findOne(userId );
+      const patient = await Patient.findById(id);
   
       if (!patient) {
         return res.status(404).json({ message: 'Patient not found' });
@@ -386,6 +386,57 @@ const createAppointment = async (req, res) => {
       return res.status(500).json({ message: 'Error fetching doctor', success: false, error });
     }
   };
+
+
+
+// Function to get all appointments
+const getAllAppointments = async (req, res) => {
+  try {
+    // Fetch all appointments and populate the referenced models (Patient, Doctor, Prescription, Diagnosis)
+    const appointments = await DoctorAppointment.find()
+      .populate('patient', 'name age')  // Customize the fields you want to retrieve
+      .populate('doctor', 'name specialization')
+      .populate('prescription')
+      .populate('diagnosis')
+      .exec();
+
+    // Send response with fetched appointments
+    res.status(200).json({
+      success: true,
+      data: appointments
+    });
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch appointments',
+      error: error.message
+    });
+  }
+};
+
+// Function to get all patients
+const getAllPatients = async (req, res) => {
+  try {
+    // Fetch all patients
+    const patients = await Patient.find().exec();
+
+    // Send response with fetched patients
+    res.status(200).json({
+      success: true,
+      data: patients
+    });
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch patients',
+      error: error.message
+    });
+  }
+};
+
+
   
 module.exports = {
     registerUser,
@@ -400,4 +451,6 @@ module.exports = {
     createAppointment,
     getPatientById,
     getDoctorByEmail,
+    getAllAppointments,
+    getAllPatients,
 }

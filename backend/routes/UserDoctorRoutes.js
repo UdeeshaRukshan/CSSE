@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const {registerUser, loginUser, getMe , logoutUser,createDoctor,getDoctorById,createPrescription,createDiagnosis,
-    createPatient,createAppointment,getPatientById,getDoctorByEmail} = require('../controllers/DoctorController');
+    createPatient,createAppointment,getPatientById,getDoctorByEmail,getAllAppointments,getAllPatients} = require('../controllers/DoctorController');
 const { get } = require('react-hook-form');
  
  
@@ -30,5 +30,9 @@ router.post('/createpatient',createPatient)
 router.post('/createappointment',createAppointment)
 
 router.get('/getpatient/:id',getPatientById)
+
+router.get('/getappointments',getAllAppointments)
+
+router.get('/getallpatient',getAllPatients)
 
 module.exports = router

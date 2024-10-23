@@ -328,9 +328,11 @@ import { useParams } from 'next/navigation'
 import { Search, ChevronLeft, ChevronRight, User, Mail, Calendar, MapPin, Briefcase, Phone, UserPlus, FileText, AlertCircle, Pill, Heart, FileCheck, CreditCard } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation'
+import DefaultSidebar from '../sidebar/page'
 
 interface PatientDetails {
   _id: string;
+  username:string,
   userId: string;
   email: string;
   birthDate: string;
@@ -368,6 +370,7 @@ export default function PatientDetailsPage() {
 
   useEffect(() => {
     if (id) {
+      console.log(id);
       fetchPatientDetails(id);
     }
   }, [id]);
@@ -375,12 +378,14 @@ export default function PatientDetailsPage() {
   const fetchPatientDetails = async (patientId: string) => {
     try {
       setIsLoading(true);
+      console.log(patientId);
       const response = await fetch(`http://localhost:4000/api/doctor/getpatient/${patientId}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch patient details');
       }
       const data = await response.json();
+      console.log(data);
       setPatientData(data);
       setIsLoading(false);
     } catch (err) {
@@ -463,10 +468,11 @@ export default function PatientDetailsPage() {
                 </div>
                 <h2 className="text-2xl font-semibold text-gray-800">Patient ID: {patientData.userId}</h2>
               </div>
-              <Button className="bg-[#66BB6A] hover:bg-[#5CA85C] text-white font-bold"
-                onClick={() => handlePatientClick(patientData._id)} >
-                Medical History
-              </Button>
+              <button className="bg-[#aaf0c9] hover:bg-[#5CA85C] text-black font-bold py-2 px-6 rounded-lg w-48 h-12 flex items-center justify-center"
+        onClick={() => handlePatientClick(patientData._id)} >
+        Medical History
+</button>
+               
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
